@@ -1,7 +1,11 @@
 import { Request, Response } from 'express';
+import { Post } from '@tsed/schema';
+import { Controller } from '@tsed/di';
 import { ormCreateUser as _createUser, ormCheckUserExist as _checkUserExist } from '../model/user-orm';
 
-class UserController {
+@Controller('/user')
+export default class UserCtrl {
+  @Post()
   async createUser(req: Request, res: Response) {
     try {
       const { username, password } = req.body;
@@ -27,5 +31,3 @@ class UserController {
     }
   }
 }
-
-export default UserController;

@@ -1,23 +1,17 @@
-import express from 'express';
+import { $log } from '@tsed/common';
+import { PlatformExpress } from '@tsed/platform-express';
+import Server from './Server';
 
-import UserController from './controller/user-controller';
+async function bootstrap() {
+  try {
+    $log.debug('Start server...');
+    const platform = await PlatformExpress.bootstrap(Server, {});
 
-const userController = new UserController();
+    await platform.listen();
+    $log.debug('Server initialized');
+  } catch (er) {
+    $log.error(er);
+  }
+}
 
-const cors = require('cors');
-
-const app = express();
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
-app.use(cors()); // config cors so that front-end can use
-app.options('*', cors());
-
-const router = express.Router();
-
-// Controller will contain all the User-defined Routes
-router.get('/', (_, res) => res.send('Hello World from user-service'));
-router.post('/', userController.createUser);
-
-app.use('/api/user', router);
-
-app.listen(8000, () => console.log('user-service listening on port 8000'));
+bootstrap();
