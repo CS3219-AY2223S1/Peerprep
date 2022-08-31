@@ -1,9 +1,10 @@
 {
   "parser": "@typescript-eslint/parser",
   "parserOptions": { "project": "./tsconfig.json" },
-  "extends": ["airbnb", "airbnb-typescript"],
+  "extends": ["airbnb-base", "airbnb-typescript/base"],
   "rules" : {
     "@typescript-eslint/no-use-before-define": "off",
     "class-methods-use-this": "off"
   }
 }
+  
