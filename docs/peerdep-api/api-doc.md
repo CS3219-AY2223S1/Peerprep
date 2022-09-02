@@ -1,47 +1,75 @@
-
-# peerdep-api
-
-
-
-## Indices
-
-* [user-service](#user-service)
-
-  * [Create user](#1-create-user)
-
-
---------
-
-
-## user-service
-
-
-
-### 1. Create user
-
-
-
-***Endpoint:***
-
-```bash
-Method: POST
-Type: RAW
-URL: http://localhost:8000/api/user
-```
-
-
-
-***Body:***
-
-```js        
 {
-    "username": "test",
-    "password": "test"
+	"info": {
+		"_postman_id": "6e47c1c9-e44b-49fe-bb61-d91f9c42d239",
+		"name": "peerdep-api",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "15891105"
+	},
+	"item": [
+		{
+			"name": "user-service",
+			"item": [
+				{
+					"name": "Create user",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\" : \"test\",\r\n    \"password\" : \"test\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/user/signup",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"user",
+								"signup"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login user",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\" : \"test\",\n    \"password\" : \"test\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/user/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"user",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
 }
-```
-
-
-
----
-[Back to top](#peerdep-api)
-> Made with &#9829; by [thedevsaddam](https://github.com/thedevsaddam) | Generated at: 2022-08-28 23:33:56 by [docgen](https://github.com/thedevsaddam/docgen)

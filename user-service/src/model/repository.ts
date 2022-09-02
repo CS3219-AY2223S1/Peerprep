@@ -18,3 +18,17 @@ export async function isUsernameExist(username: string) {
   // return 1 if username exists else 0
   return UserModel.find({ username }, '_id').count();
 }
+
+export async function isUsernameAndPasswordMatch(username: string, password: string) {
+  if (await isUsernameExist(username) !== 1) {
+    return false;
+  }
+  const user = await UserModel.findOne({ "username" : username }).lean();
+  return user?.password === password;
+}
+
+export async function getId(username: string) {
+  const user = await UserModel.findOne({ "username" : username }).lean();
+  return user?._id;
+}
+
