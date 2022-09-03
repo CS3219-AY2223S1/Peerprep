@@ -1,11 +1,15 @@
-import React from 'react';
+import React from "react";
 import {
-  BrowserRouter as Router, Routes, Route, Navigate,
-} from 'react-router-dom';
-import { Box } from '@mui/material';
-import SignupPage from './components/SignupPage';
-import SocketTest from './pages/SocketTest';
-import MatchPage from './pages/MatchPage';
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
+import { Box } from "@mui/material";
+import SignupPage from "./components/SignupPage";
+import SocketTest from "./pages/SocketTest";
+import MatchPage from "./pages/MatchPage";
+import LoginPage from "./pages/LoginPage";
 
 function App() {
   return (
@@ -16,6 +20,7 @@ function App() {
             <Route path="/" element={<Navigate replace to="/signup" />} />
             <Route path="/signup" element={<SignupPage />} />
             <Route path="/match" element={<MatchPage />} />
+            <Route path="/login" element={<LoginPage />} />
             <Route path="/socket-test" element={<SocketTest />} />
           </Routes>
         </Router>
