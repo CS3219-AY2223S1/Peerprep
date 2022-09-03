@@ -1,4 +1,4 @@
-import { createUser, isUsernameExist } from './repository';
+import { createUser, getId, isUsernameAndPasswordMatch, isUsernameExist } from './repository';
 import { IUserModel } from './user-model';
 
 // need to separate orm functions from repository to decouple business logic from persistence
@@ -18,6 +18,24 @@ export async function ormCheckUserExist(username: string) {
     return await isUsernameExist(username);
   } catch (err) {
     console.log('ERROR: Could not check if username exist');
+    return false;
+  }
+}
+
+export async function ormVerifyUserCredentials(username: string, password: string) {
+  try {
+    return await isUsernameAndPasswordMatch(username, password);
+  } catch (err) {
+    console.log('ERROR: Could not check if username matches password');
+    return false;
+  }
+}
+
+export async function ormGetUserId(username: string) {
+  try {
+    return await getId(username);
+  } catch (err) {
+    console.log('ERROR: Could not retrieve user ID');
     return false;
   }
 }
