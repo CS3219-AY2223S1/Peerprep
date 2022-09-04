@@ -1,5 +1,6 @@
 import React from "react";
 import {
+
   BrowserRouter as Router,
   Routes,
   Route,
@@ -20,8 +21,11 @@ function App() {
             <Route path="/" element={<Navigate replace to="/signup" />} />
             <Route path="/signup" element={<SignupPage />} />
             <Route path="/match" element={<MatchPage />} />
+<<<<<<< HEAD
             <Route path="/login" element={<LoginPage />} />
             <Route path="/socket-test" element={<SocketTest />} />
+=======
+>>>>>>> main
           </Routes>
         </Router>
       </Box>
