@@ -30,5 +30,5 @@ skeleton.
 ## Generating API Documentation
 1. Follow the instructions [here](https://github.com/thedevsaddam/docgen) to install docgen
 2. Export postman collection as Collection v2.1 to docs/peerdep-api directory
-3. Run `docgen` to generate documentation
+3. Run `docgen build -i peerdep-api.postman_collection.json -o api-doc.md -m` to generate documentation
 
