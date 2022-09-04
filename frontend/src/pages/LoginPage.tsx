@@ -1,14 +1,71 @@
+import axios from "axios";
 import React, { useState } from "react";
-import { Cookies, useCookies } from "react-cookie";
-import { Box, Button, TextField, Typography } from "@mui/material";
+import { useCookies } from "react-cookie";
+import { Link } from "react-router-dom";
+import {
+  Box,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  TextField,
+  Typography,
+} from "@mui/material";
+import { URL_USER_LOGIN_SVC } from "../configs";
+import {
+  STATUS_CODE_FORBIDDEN,
+  STATUS_CODE_INVALID,
+  STATUS_CODE_SUCCESS,
+} from "../constants";
 
 function LoginPage() {
   const [cookies, setCookie] = useCookies(["userCred"]);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [dialogTitle, setDialogTitle] = useState("");
+  const [dialogMsg, setDialogMsg] = useState("");
+  const [isLoginSuccess, setIsLoginSuccess] = useState(false);
 
-  function saveCred() {
-    setCookie("userCred", [username, password], { path: "/" });
+  const handleLogin = async () => {
+    setIsLoginSuccess(false);
+    console.log({ username, password });
+    const res = await axios
+      .post(URL_USER_LOGIN_SVC, { username, password })
+      .catch((err) => {
+        if (err.response.status === STATUS_CODE_FORBIDDEN) {
+          setErrorDialog("Invalid Username and/or Password!");
+        } else if (err.response.status === STATUS_CODE_INVALID) {
+          setErrorDialog("Password and Username cannot be empty!");
+        } else {
+          setErrorDialog("Internal Server Error");
+        }
+      });
+    if (res && res.status === STATUS_CODE_SUCCESS) {
+      setSuccessDialog("Account successfully logged in");
+      setIsLoginSuccess(true);
+      saveCred(res.data);
+    }
+  };
+
+  const closeDialog = () => setIsDialogOpen(false);
+
+  const setSuccessDialog = (msg) => {
+    setIsDialogOpen(true);
+    setDialogTitle("Success");
+    setDialogMsg(msg);
+  };
+
+  const setErrorDialog = (msg) => {
+    setIsDialogOpen(true);
+    setDialogTitle("Error");
+    setDialogMsg(msg);
+  };
+
+  function saveCred(token) {
+    setCookie("userCred", token, { path: "/" });
   }
 
   return (
@@ -35,10 +92,26 @@ function LoginPage() {
           onChange={(e) => setPassword(e.target.value)}
           sx={{ marginBottom: "2rem" }}
         />
+
         <Box className="flex flex-row-reverse">
-          <Button variant="outlined" onClick={saveCred}>
+          <Button variant="outlined" onClick={handleLogin}>
             Log in
           </Button>
+          <Dialog open={isDialogOpen} onClose={closeDialog}>
+            <DialogTitle>{dialogTitle}</DialogTitle>
+            <DialogContent>
+              <DialogContentText>{dialogMsg}</DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              {isLoginSuccess ? (
+                <Button component={Link} to="/">
+                  Home
+                </Button>
+              ) : (
+                <Button onClick={closeDialog}>Done</Button>
+              )}
+            </DialogActions>
+          </Dialog>
         </Box>
       </div>
     </div>
