@@ -104,8 +104,8 @@ function LoginPage() {
             </DialogContent>
             <DialogActions>
               {isLoginSuccess ? (
-                <Button component={Link} to="/">
-                  Home
+                <Button component={Link} to="/match">
+                  Match
                 </Button>
               ) : (
                 <Button onClick={closeDialog}>Done</Button>

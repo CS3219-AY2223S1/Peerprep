@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import UserModel, { IUserModel } from './user-model';
+import bcrypt from 'bcryptjs';
 
 // Set up mongoose connection
 require('dotenv').config();
@@ -24,7 +25,8 @@ export async function isUsernameAndPasswordMatch(username: string, password: str
     return false;
   }
   const user = await UserModel.findOne({ "username" : username }).lean();
-  return user?.password === password;
+  // compares stored hashed password with user-entered password
+  return await bcrypt.compare(password, user!.password);
 }
 
 export async function getId(username: string) {

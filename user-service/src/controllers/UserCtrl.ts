@@ -8,6 +8,7 @@ import {
   ormGetUserId as _getUserId,
 } from "../model/user-orm";
 import jwt from "jsonwebtoken";
+import bcrypt from "bcryptjs";
 
 @Controller("/user")
 export default class UserCtrl {
@@ -23,8 +24,16 @@ export default class UserCtrl {
           return res.status(409).json({ message: "Account already exists!" });
         }
 
+        if (password.length < 8) {
+          return res
+            .status(406)
+            .json({ message: "Password must be at least 8 characters long!" });
+        }
+        // Hash the password with a cost factor of 10
+        const hashedPassword = await bcrypt.hash(password, 10);
+
         // create a new user
-        const resp = await _createUser({ username, password });
+        const resp = await _createUser({ username, password: hashedPassword });
         console.log(resp);
         if (!resp) {
           return res
@@ -54,18 +63,21 @@ export default class UserCtrl {
         const isMatch = await _verifyUserCredentials(username, password);
         if (isMatch) {
           const userId = await _getUserId(username);
-          console.log("userId", userId);
           const user = { username: username, id: userId };
           const accessToken = jwt.sign(user, process.env.LOGIN_SECRET_KEY!);
-          return res.status(200).json({ accessToken: accessToken });
-          // return res.status(200).json({ message: `Logged in as ${username} successfully!`});
+          return res
+            .status(200)
+            .json({
+              message: `Logged in as ${username} successfully!`,
+              accessToken: accessToken,
+            });
         }
         return res
-          .status(403)
+          .status(401)
           .json({ message: "Invalid Username and/or Password!" });
       }
       return res
-        .status(401)
+        .status(403)
         .json({ message: "Username and/or Password are missing!" });
     } catch (err) {
       return res
