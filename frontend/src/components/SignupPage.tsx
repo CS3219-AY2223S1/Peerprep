@@ -8,19 +8,19 @@ import {
   DialogTitle,
   TextField,
   Typography,
-} from "@mui/material";
-import React, { useState } from "react";
-import axios from "axios";
-import { Link } from "react-router-dom";
-import { URL_USER_SIGNUP_SVC } from "../configs";
-import { STATUS_CODE_CONFLICT, STATUS_CODE_CREATED } from "../constants";
+} from '@mui/material';
+import React, { useState } from 'react';
+import axios from 'axios';
+import { Link } from 'react-router-dom';
+import { URL_USER_SIGNUP_SVC } from '../configs';
+import { STATUS_CODE_CONFLICT, STATUS_CODE_CREATED } from '../constants';
 
 function SignupPage() {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [dialogTitle, setDialogTitle] = useState("");
-  const [dialogMsg, setDialogMsg] = useState("");
+  const [dialogTitle, setDialogTitle] = useState('');
+  const [dialogMsg, setDialogMsg] = useState('');
   const [isSignupSuccess, setIsSignupSuccess] = useState(false);
 
   const handleSignup = async () => {
@@ -29,13 +29,13 @@ function SignupPage() {
       .post(URL_USER_SIGNUP_SVC, { username, password })
       .catch((err) => {
         if (err.response.status === STATUS_CODE_CONFLICT) {
-          setErrorDialog("This username already exists");
+          setErrorDialog('This username already exists');
         } else {
-          setErrorDialog("Please try again later");
+          setErrorDialog('Please try again later');
         }
       });
     if (res && res.status === STATUS_CODE_CREATED) {
-      setSuccessDialog("Account successfully created");
+      setSuccessDialog('Account successfully created');
       setIsSignupSuccess(true);
     }
   };
@@ -44,13 +44,13 @@ function SignupPage() {
 
   const setSuccessDialog = (msg) => {
     setIsDialogOpen(true);
-    setDialogTitle("Success");
+    setDialogTitle('Success');
     setDialogMsg(msg);
   };
 
   const setErrorDialog = (msg) => {
     setIsDialogOpen(true);
-    setDialogTitle("Error");
+    setDialogTitle('Error');
     setDialogMsg(msg);
   };
 
@@ -67,7 +67,7 @@ function SignupPage() {
           variant="standard"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
-          sx={{ marginBottom: "1rem" }}
+          sx={{ marginBottom: '1rem' }}
           autoFocus
         />
         <TextField
@@ -76,7 +76,7 @@ function SignupPage() {
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          sx={{ marginBottom: "2rem" }}
+          sx={{ marginBottom: '2rem' }}
         />
         <Box display="flex" flexDirection="row" justifyContent="flex-end">
           <Button variant="outlined" onClick={handleSignup}>
