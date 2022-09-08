@@ -1,9 +1,11 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { Button, CircularProgress, TextField } from '@mui/material';
+import { Button, CircularProgress } from '@mui/material';
 import { io, Socket } from 'socket.io-client';
+import { useAuthContext } from '../contexts/AuthContext';
 
 export default () => {
   const socket = useMemo<Socket>(() => io('http://localhost:8001'), []);
+  const { user } = useAuthContext();
 
   useEffect(() => {
     socket.on('matched', (data) => {
@@ -12,7 +14,6 @@ export default () => {
   }, [socket]);
 
   const [timer, setTimer] = useState<number>(0);
-  const [userName, setUserName] = useState<string>('');
   const TIMEOUT = 10;
   const REDIRECT_TIME = 3;
   enum Difficulty {
@@ -37,7 +38,7 @@ export default () => {
     startTimer();
     switch (difficulty) {
       case Difficulty.Easy:
-        socket.emit('join_queue', { difficulty, userName });
+        socket.emit('join_queue', { difficulty, user });
         break;
       case Difficulty.Medium:
         // TODO
@@ -58,7 +59,7 @@ export default () => {
         </div>
       ) : (
         <div className="flex flex-col space-y-8">
-          <TextField value={userName} onChange={(event) => setUserName(event.target.value)} />
+          <p>{user}</p>
           <Button size="large" variant="contained" color="success" onClick={() => handleSelection(Difficulty.Easy)}><b>Easy</b></Button>
           <Button size="large" variant="contained" color="warning" onClick={() => handleSelection(Difficulty.Medium)}><b>Medium</b></Button>
           <Button size="large" variant="contained" color="error" onClick={() => handleSelection(Difficulty.Hard)}><b>Hard</b></Button>
