@@ -3,7 +3,7 @@ import cors from 'cors';
 import http, { Server as httpServer } from 'http';
 import { Server } from 'socket.io';
 import { Event } from './constants';
-import joinQueue from './socket/joinQueue';
+import { joinQueue, authMiddleware, leaveQueue } from './socket';
 
 export default class SocketServer {
   private httpServer: httpServer;
@@ -36,10 +36,11 @@ export default class SocketServer {
         methods: ['GET'],
       },
     });
-
+    authMiddleware(socketIoServer);
     socketIoServer.on(Event.CONNECTION, ((socket) => {
       console.log(`${socket.id} connected!`);
       socket.on(Event.JOIN_QUEUE, joinQueue(socket, socketIoServer));
+      socket.on(Event.LEAVE_QUEUE, leaveQueue(socket, socketIoServer));
     }));
 
     return { httpServer, socketIoServer };
