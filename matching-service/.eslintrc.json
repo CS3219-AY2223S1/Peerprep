@@ -6,6 +6,9 @@
     "@typescript-eslint/no-use-before-define": "off",
     "class-methods-use-this": "off",
     "@typescript-eslint/no-shadow": "off",
-    "implicit-arrow-linebreak": "off"
+    "implicit-arrow-linebreak": "off",
+    "no-param-reassign":  "off",
+    "no-promise-executor-return": "off",
+    "import/prefer-default-export": "off"
   }
 }
