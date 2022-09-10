@@ -1,6 +1,5 @@
 import axios from "axios";
 import React, { useState } from "react";
-import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
 import {
   Box,
@@ -23,9 +22,9 @@ import {
   STATUS_CODE_SUCCESS,
   STATUS_CODE_UNAUTHORISED,
 } from "../constants";
+import { useAuthContext } from "../contexts/AuthContext";
 
 function LoginPage() {
-  const [cookies, setCookie] = useCookies(["userCred"]);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -35,6 +34,7 @@ function LoginPage() {
   const [isSignupSuccess, setIsSignupSuccess] = useState(false);
   const [isExistingUser, setIsExistingUser] = useState(true);
   const navigate = useNavigate();
+  const { dispatch, setCookie } = useAuthContext();
 
   const handleLogin = async () => {
     setIsLoginSuccess(false);
@@ -51,8 +51,9 @@ function LoginPage() {
         }
       });
     if (res && res.status === STATUS_CODE_SUCCESS) {
+      setSuccessDialog("Account successfully logged in");
       setIsLoginSuccess(true);
-      saveCred(res.data);
+      saveCred(res.data.accessToken);
       navigate("/match");
     }
   };
@@ -100,6 +101,7 @@ function LoginPage() {
   };
 
   function saveCred(token) {
+    dispatch({ type: "LOGIN", payload: { user: username } });
     setCookie("userCred", token, { path: "/" });
   }
 

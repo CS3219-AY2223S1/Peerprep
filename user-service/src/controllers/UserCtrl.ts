@@ -64,7 +64,9 @@ export default class UserCtrl {
         if (isMatch) {
           const userId = await _getUserId(username);
           const user = { username: username, id: userId };
-          const accessToken = jwt.sign(user, process.env.LOGIN_SECRET_KEY!);
+          const accessToken = jwt.sign(user, process.env.LOGIN_SECRET_KEY!, {
+            expiresIn: 60 * 60 * 24,
+          }); // expires in 24 hours
           return res.status(200).json({
             message: `Logged in as ${username} successfully!`,
             accessToken: accessToken,
