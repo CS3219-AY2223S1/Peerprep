@@ -1,14 +1,14 @@
 import { Request, Response } from "express";
 import { Post } from "@tsed/schema";
 import { Controller } from "@tsed/di";
+import jwt from "jsonwebtoken";
+import bcrypt from "bcryptjs";
 import {
   ormCreateUser as _createUser,
   ormCheckUserExist as _checkUserExist,
   ormVerifyUserCredentials as _verifyUserCredentials,
   ormGetUserId as _getUserId,
 } from "../model/user-orm";
-import jwt from "jsonwebtoken";
-import bcrypt from "bcryptjs";
 
 @Controller("/user")
 export default class UserCtrl {
