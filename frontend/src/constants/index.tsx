@@ -1,7 +1,8 @@
 export const STATUS_CODE_CREATED = 201;
 export const STATUS_CODE_CONFLICT = 409;
-export const STATUS_CODE_FORBIDDEN = 401;
-export const STATUS_CODE_INVALID = 403;
+export const STATUS_CODE_UNAUTHORISED = 406;
+export const STATUS_CODE_FORBIDDEN = 403;
+export const STATUS_CODE_INVALID = 401;
 export const STATUS_CODE_SUCCESS = 200;
 
 export enum Match {
