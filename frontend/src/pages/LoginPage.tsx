@@ -1,6 +1,6 @@
-import axios from "axios";
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import axios from 'axios';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   Box,
   Button,
@@ -12,8 +12,8 @@ import {
   Link as ButtonLink,
   TextField,
   Typography,
-} from "@mui/material";
-import { URL_USER_LOGIN_SVC, URL_USER_SIGNUP_SVC } from "../configs";
+} from '@mui/material';
+import { URL_USER_LOGIN_SVC, URL_USER_SIGNUP_SVC } from '../configs';
 import {
   STATUS_CODE_CONFLICT,
   STATUS_CODE_CREATED,
@@ -21,40 +21,36 @@ import {
   STATUS_CODE_INVALID,
   STATUS_CODE_SUCCESS,
   STATUS_CODE_UNAUTHORISED,
-} from "../constants";
-import { useAuthContext } from "../contexts/AuthContext";
+} from '../constants';
+import { useAuthContext } from '../contexts/AuthContext';
 
 function LoginPage() {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [dialogTitle, setDialogTitle] = useState("");
-  const [dialogMsg, setDialogMsg] = useState("");
-  const [isLoginSuccess, setIsLoginSuccess] = useState(false);
+  const [dialogTitle, setDialogTitle] = useState('');
+  const [dialogMsg, setDialogMsg] = useState('');
   const [isSignupSuccess, setIsSignupSuccess] = useState(false);
   const [isExistingUser, setIsExistingUser] = useState(true);
   const navigate = useNavigate();
   const { dispatch, setCookie } = useAuthContext();
 
   const handleLogin = async () => {
-    setIsLoginSuccess(false);
-    console.log({ username, password });
     const res = await axios
       .post(URL_USER_LOGIN_SVC, { username, password })
       .catch((err) => {
         if (err.response.status === STATUS_CODE_FORBIDDEN) {
-          setErrorDialog("Invalid Username and/or Password!");
+          setErrorDialog('Invalid Username and/or Password!');
         } else if (err.response.status === STATUS_CODE_INVALID) {
-          setErrorDialog("Password and Username cannot be empty!");
+          setErrorDialog('Password and Username cannot be empty!');
         } else {
-          setErrorDialog("Internal Server Error");
+          setErrorDialog('Internal Server Error');
         }
       });
     if (res && res.status === STATUS_CODE_SUCCESS) {
-      setSuccessDialog("Account successfully logged in");
-      setIsLoginSuccess(true);
+      setSuccessDialog('Account successfully logged in');
       saveCred(res.data.accessToken);
-      navigate("/match");
+      navigate('/match');
     }
   };
 
@@ -64,17 +60,17 @@ function LoginPage() {
       .post(URL_USER_SIGNUP_SVC, { username, password })
       .catch((err) => {
         if (err.response.status === STATUS_CODE_CONFLICT) {
-          setErrorDialog("This username already exists");
+          setErrorDialog('This username already exists');
         } else if (err.response.status === STATUS_CODE_UNAUTHORISED) {
-          setErrorDialog("Password should be at least 8 characters long");
+          setErrorDialog('Password should be at least 8 characters long');
         } else if (err.response.status === STATUS_CODE_INVALID) {
-          setErrorDialog("Password and Username cannot be empty!");
+          setErrorDialog('Password and Username cannot be empty!');
         } else {
-          setErrorDialog("Internal server error");
+          setErrorDialog('Internal server error');
         }
       });
     if (res && res.status === STATUS_CODE_CREATED) {
-      setSuccessDialog("Account successfully created");
+      setSuccessDialog('Account successfully created');
       setIsSignupSuccess(true);
     }
   };
@@ -90,19 +86,19 @@ function LoginPage() {
 
   const setSuccessDialog = (msg) => {
     setIsDialogOpen(true);
-    setDialogTitle("Success");
+    setDialogTitle('Success');
     setDialogMsg(msg);
   };
 
   const setErrorDialog = (msg) => {
     setIsDialogOpen(true);
-    setDialogTitle("Error");
+    setDialogTitle('Error');
     setDialogMsg(msg);
   };
 
   function saveCred(token) {
-    dispatch({ type: "LOGIN", payload: { user: username } });
-    setCookie("userCred", token, { path: "/" });
+    dispatch({ type: 'LOGIN', payload: { user: username } });
+    setCookie('userCred', token, { path: '/' });
   }
 
   return (
@@ -124,7 +120,7 @@ function LoginPage() {
           variant="standard"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
-          sx={{ marginBottom: "1rem" }}
+          sx={{ marginBottom: '1rem' }}
           autoFocus
         />
         <TextField
@@ -133,7 +129,7 @@ function LoginPage() {
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          sx={{ marginBottom: "2rem" }}
+          sx={{ marginBottom: '2rem' }}
         />
 
         {isExistingUser ? (
