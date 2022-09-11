@@ -70,7 +70,7 @@ export const AuthContextProvider: React.FC<ProviderProps> = ({ children }) => {
   }, []);
 
   const value = useMemo(() => ({
-    ...state, dispatch, cookie, setCookie, removeCookie
+    ...state, dispatch, cookie, setCookie, removeCookie,
   }), [state, cookie]);
 
   return (

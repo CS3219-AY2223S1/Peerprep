@@ -9,19 +9,16 @@ import { Box } from '@mui/material';
 import MatchPage from './pages/MatchPage';
 import { useAuthContext } from './contexts/AuthContext';
 import LoginPage from './pages/LoginPage';
-// import NavBar from './components/common/NavBar';
 
 function App() {
   const { user } = useAuthContext();
 
   return (
     <div className="App">
-      {/* <NavBar /> */}
       <Box display="flex" flexDirection="column">
         <Router>
           <Routes>
             <Route path="/" element={<Navigate replace to="/login" />} />
-            <Route path="/match" element={<MatchPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route
               path="/match"
