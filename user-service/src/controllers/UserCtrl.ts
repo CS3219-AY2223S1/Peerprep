@@ -1,14 +1,14 @@
 import { Request, Response } from "express";
 import { Post } from "@tsed/schema";
 import { Controller } from "@tsed/di";
+import jwt from "jsonwebtoken";
+import bcrypt from "bcryptjs";
 import {
   ormCreateUser as _createUser,
   ormCheckUserExist as _checkUserExist,
   ormVerifyUserCredentials as _verifyUserCredentials,
   ormGetUserId as _getUserId,
 } from "../model/user-orm";
-import jwt from "jsonwebtoken";
-import bcrypt from "bcryptjs";
 
 @Controller("/user")
 export default class UserCtrl {
@@ -64,20 +64,20 @@ export default class UserCtrl {
         if (isMatch) {
           const userId = await _getUserId(username);
           const user = { username: username, id: userId };
-          const accessToken = jwt.sign(user, process.env.LOGIN_SECRET_KEY!, { expiresIn: 60 * 60 * 24 }); // expires in 24 hours
-          return res
-            .status(200)
-            .json({
-              message: `Logged in as ${username} successfully!`,
-              accessToken: accessToken,
-            });
+          const accessToken = jwt.sign(user, process.env.LOGIN_SECRET_KEY!, {
+            expiresIn: 60 * 60 * 24,
+          }); // expires in 24 hours
+          return res.status(200).json({
+            message: `Logged in as ${username} successfully!`,
+            accessToken: accessToken,
+          });
         }
         return res
-          .status(401)
+          .status(403)
           .json({ message: "Invalid Username and/or Password!" });
       }
       return res
-        .status(403)
+        .status(401)
         .json({ message: "Username and/or Password are missing!" });
     } catch (err) {
       return res

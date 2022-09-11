@@ -15,7 +15,7 @@ import { Link } from 'react-router-dom';
 import { URL_USER_SIGNUP_SVC } from '../configs';
 import { STATUS_CODE_CONFLICT, STATUS_CODE_CREATED } from '../constants';
 
-function SignupPage() {
+export function SignupPage() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -103,5 +103,3 @@ function SignupPage() {
     </div>
   );
 }
-
-export default SignupPage;
