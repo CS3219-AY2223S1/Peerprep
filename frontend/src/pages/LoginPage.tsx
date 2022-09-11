@@ -106,11 +106,11 @@ function LoginPage() {
       <div className="flex flex-col space-y-8 w-1/3 m-auto">
         <div className="flex justify-center">
           {isExistingUser ? (
-            <Typography className="font-normal leading-normal" variant="h3">
+            <Typography className="font-normal leading-normal" variant="h3" marginTop="4rem">
               Login
             </Typography>
           ) : (
-            <Typography className="font-normal leading-normal" variant="h3">
+            <Typography className="font-normal leading-normal" variant="h3" marginTop="4rem">
               Sign up
             </Typography>
           )}

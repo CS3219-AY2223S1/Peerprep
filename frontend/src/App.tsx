@@ -15,11 +15,10 @@ function App() {
 
   return (
     <div className="App">
-      <Box display="flex" flexDirection="column" padding="4rem">
+      <Box display="flex" flexDirection="column">
         <Router>
           <Routes>
             <Route path="/" element={<Navigate replace to="/login" />} />
-            <Route path="/match" element={<MatchPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route
               path="/match"

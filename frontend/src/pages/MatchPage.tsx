@@ -1,8 +1,9 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { Button, CircularProgress } from '@mui/material';
+import { Button, CircularProgress, Box } from '@mui/material';
 import { io, Socket } from 'socket.io-client';
 import { useCookies } from 'react-cookie';
 import { useAuthContext } from '../contexts/AuthContext';
+import NavBar from '../components/common/NavBar';
 import { Difficulty, Match, SocketEvent } from '../constants';
 import { ConnectedElseWhereModal, AlreadyInQueueModal } from '../components';
 
@@ -48,23 +49,28 @@ export default () => {
   };
 
   return (
-    <div className="h-1/3 w-1/3 absolute inset-0 m-auto">
-      <ConnectedElseWhereModal visible={isConnectedElsewhere} />
-      <AlreadyInQueueModal visible={isInQueue} setVisible={setisInQueue} />
-      {timer ? (
-        <div className="flex flex-col justify-center items-center">
-          <div className="mb-5 font-semibold font-sans text-3xl">{timer > Match.REDIRECT_TIME ? 'Finding a match...' : 'Unable to find :( Please try again.'}</div>
-          {timer > Match.REDIRECT_TIME
-            ? <div className="text-9xl animate-ping delay-1000">{timer - Match.REDIRECT_TIME}</div> : <CircularProgress />}
+    <div>
+      <NavBar />
+      <Box display="flex" flexDirection="column">
+        <div className="h-1/3 w-1/3 absolute inset-0 m-auto">
+          <ConnectedElseWhereModal visible={isConnectedElsewhere} />
+          <AlreadyInQueueModal visible={isInQueue} setVisible={setisInQueue} />
+          {timer ? (
+            <div className="flex flex-col justify-center items-center">
+              <div className="mb-5 font-semibold font-sans text-3xl">{timer > Match.REDIRECT_TIME ? 'Finding a match...' : 'Unable to find :( Please try again.'}</div>
+              {timer > Match.REDIRECT_TIME
+                ? <div className="text-9xl animate-ping delay-1000">{timer - Match.REDIRECT_TIME}</div> : <CircularProgress />}
+            </div>
+          ) : (
+            <div className="flex flex-col space-y-8">
+              <p>{user}</p>
+              <Button size="large" variant="contained" color="success" onClick={() => handleSelection(Difficulty.Easy)}><b>Easy</b></Button>
+              <Button size="large" variant="contained" color="warning" onClick={() => handleSelection(Difficulty.Medium)}><b>Medium</b></Button>
+              <Button size="large" variant="contained" color="error" onClick={() => handleSelection(Difficulty.Hard)}><b>Hard</b></Button>
+            </div>
+          )}
         </div>
-      ) : (
-        <div className="flex flex-col space-y-8">
-          <p>{user}</p>
-          <Button size="large" variant="contained" color="success" onClick={() => handleSelection(Difficulty.Easy)}><b>Easy</b></Button>
-          <Button size="large" variant="contained" color="warning" onClick={() => handleSelection(Difficulty.Medium)}><b>Medium</b></Button>
-          <Button size="large" variant="contained" color="error" onClick={() => handleSelection(Difficulty.Hard)}><b>Hard</b></Button>
-        </div>
-      )}
+      </Box>
     </div>
   );
 };
