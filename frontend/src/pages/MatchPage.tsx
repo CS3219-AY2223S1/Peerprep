@@ -1,23 +1,24 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, CircularProgress, Box } from '@mui/material';
-import { io, Socket } from 'socket.io-client';
-import { useCookies } from 'react-cookie';
+import { useNavigate } from 'react-router-dom';
 import { useAuthContext } from '../contexts/AuthContext';
 import NavBar from '../components/common/NavBar';
 import { Difficulty, Match, SocketEvent } from '../constants';
 import { ConnectedElseWhereModal, AlreadyInQueueModal } from '../components';
+import { useSocketContext } from '../contexts/SocketContext';
 
 export default () => {
-  const [cookie] = useCookies(['userCred']);
-  const socket = useMemo<Socket>(() => io('http://localhost:8001', { auth: { token: cookie.userCred } }), []);
   const { user } = useAuthContext();
+  const { socket, dispatch } = useSocketContext();
   const [isConnectedElsewhere, setIsConnectedElsewhere] = useState<boolean>(false);
   const [isInQueue, setisInQueue] = useState<boolean>(false);
   const [timer, setTimer] = useState<number>(0);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    socket.on(SocketEvent.MATCHED, (data) => {
-      console.log(data);
+    socket.on(SocketEvent.MATCHED, (data: { partner: String, roomId: Number }) => {
+      dispatch({ type: 'MATCHED', payload: { partner: data.partner, roomId: data.roomId } });
+      navigate(`/room/${data.roomId}`);
     });
     socket.on(SocketEvent.CONNECTED_ELSEWHERE, () => {
       setIsConnectedElsewhere(true);

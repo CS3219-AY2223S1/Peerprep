@@ -15,7 +15,7 @@ export const useAuthContext = () => {
 };
 
 interface Action {
-  type: string
+  type: String
   payload?: {
     user: String;
   };
@@ -53,7 +53,7 @@ export const AuthContextProvider: React.FC<ProviderProps> = ({ children }) => {
     user: cookie.userCred ? (decodeToken(cookie.userCred) as UserCred).username : null,
   });
 
-  console.log('Authcontext state, cookie', state, cookie);
+  console.log('Authcontext state, cookie:', state, cookie);
 
   const checkLogin = () => {
     if (cookie.userCred) {

@@ -9,6 +9,7 @@ import { Box } from '@mui/material';
 import MatchPage from './pages/MatchPage';
 import { useAuthContext } from './contexts/AuthContext';
 import LoginPage from './pages/LoginPage';
+import RoomPage from './pages/RoomPage';
 
 function App() {
   const { user } = useAuthContext();
@@ -20,10 +21,8 @@ function App() {
           <Routes>
             <Route path="/" element={<Navigate replace to="/login" />} />
             <Route path="/login" element={<LoginPage />} />
-            <Route
-              path="/match"
-              element={!user ? <Navigate replace to="/login" /> : <MatchPage />}
-            />
+            <Route path="/match" element={!user ? <Navigate replace to="/login" /> : <MatchPage />} />
+            <Route path="/room/:id" element={!user ? <Navigate replace to="/login" /> : <RoomPage />} />
           </Routes>
         </Router>
       </Box>
