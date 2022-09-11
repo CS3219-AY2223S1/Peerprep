@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
-import { Post } from "@tsed/schema";
+import { Post, string } from "@tsed/schema";
 import { Controller } from "@tsed/di";
-import jwt from "jsonwebtoken";
+import jwt, { JwtPayload } from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import {
   ormCreateUser as _createUser,
@@ -9,6 +9,7 @@ import {
   ormVerifyUserCredentials as _verifyUserCredentials,
   ormGetUserId as _getUserId,
 } from "../model/user-orm";
+import { verifyToken } from "./AuthMiddleware";
 
 @Controller("/user")
 export default class UserCtrl {
@@ -63,7 +64,10 @@ export default class UserCtrl {
         const isMatch = await _verifyUserCredentials(username, password);
         if (isMatch) {
           const userId = await _getUserId(username);
-          const user = { username: username, id: userId };
+          const user = {
+            username: username,
+            id: userId,
+          };
           const accessToken = jwt.sign(user, process.env.LOGIN_SECRET_KEY!, {
             expiresIn: 60 * 60 * 24,
           }); // expires in 24 hours
@@ -71,10 +75,11 @@ export default class UserCtrl {
             message: `Logged in as ${username} successfully!`,
             accessToken: accessToken,
           });
+        } else {
+          return res
+            .status(403)
+            .json({ message: "Invalid Username and/or Password!" });
         }
-        return res
-          .status(403)
-          .json({ message: "Invalid Username and/or Password!" });
       }
       return res
         .status(401)
@@ -86,36 +91,29 @@ export default class UserCtrl {
     }
   }
 
-  // @Post("/verify")
-  // async verifyUser(req: Request, res: Response) {
-  //   try {
-  //     // const authHeader = req.headers['authorization'];
-  //     // const token = authHeader && authHeader.split(' ')[1];
-  //     const token = req.body;
-  //     if (token === null) {
-  //       return res.sendStatus(401);
-  //     }
-  //     const accessToken = token || 'WRONG';
-  //     jwt.verify(accessToken, process.env.LOGIN_SECRET_KEY || 'WRONG', (err, user) => {
-  //       if (err) {
-  //         return res.sendStatus(403);
-  //       }
-  //       console.log(user);
-  //       // If no error
-  //       // const { username, password } = user
-  //       // if (username && password) {
-  //       //   const isMatch = await _verifyUserCredentials(username, password);
-  //       //   if (isMatch) {
-  //       //     return res.status(200).json({ message: `Logged in as ${username} successfully!`});
-  //       //   }
-  //       //   return res.status(401).json({ message: 'Invalid Username and/or Password!'});
-  //       // }
-  //       // return res.status(400).json({ message: 'Username and/or Password are missing!' });
-
-  //     })
-  //     } catch (err) {
-  //       return res.status(500).json({ message: 'Database failure when signing in user!' });
-  //     }
-
-  // }
+  @Post("/verify")
+  async verifyUser(req: Request, res: Response) {
+    const token = req.body.accessToken;
+    console.log(token);
+    if (token) {
+      const verifiedToken = await verifyToken(token);
+      if (verifiedToken) {
+        const user = {
+          username: (verifiedToken as JwtPayload).username,
+          id: (verifiedToken as JwtPayload).id,
+        };
+        const newToken = jwt.sign(user, process.env.LOGIN_SECRET_KEY!, {
+          expiresIn: 60 * 60 * 24,
+        });
+        return res.status(200).json({
+          message: "User successfully verified!",
+          accessToken: newToken,
+        });
+      } else {
+        return res.status(403).json({ message: "Invalid jwt!" });
+      }
+    } else if (!token) {
+      return res.sendStatus(401).json({ message: "No user stored in cookie!" });
+    }
+  }
 }
