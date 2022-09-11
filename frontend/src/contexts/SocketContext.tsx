@@ -49,7 +49,6 @@ export const SocketContextProvider: React.FC<ProviderProps> = ({ children }) => 
     if (cookie.userCred) {
       return io('http://localhost:8001', { auth: { token: cookie.userCred } });
     }
-    dispatch({ type: 'DISCONNECT' });
     return null;
   }, [cookie]);
 
