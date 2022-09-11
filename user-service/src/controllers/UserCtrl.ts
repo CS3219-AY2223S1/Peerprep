@@ -6,6 +6,7 @@ import bcrypt from "bcryptjs";
 import {
   ormCreateUser as _createUser,
   ormCheckUserExist as _checkUserExist,
+  ormDeleteUser as _deleteUser,
   ormVerifyUserCredentials as _verifyUserCredentials,
   ormGetUserId as _getUserId,
 } from "../model/user-orm";
@@ -94,7 +95,6 @@ export default class UserCtrl {
   @Post("/verify")
   async verifyUser(req: Request, res: Response) {
     const token = req.body.accessToken;
-    console.log(token);
     if (token) {
       const verifiedToken = await verifyToken(token);
       if (verifiedToken) {
@@ -114,6 +114,36 @@ export default class UserCtrl {
       }
     } else if (!token) {
       return res.sendStatus(401).json({ message: "No user stored in cookie!" });
+    }
+  }
+
+  @Post("/delete")
+  async deleteUser(req: Request, res: Response) {
+    const { password, accessToken } = req.body;
+    if (!accessToken) {
+      return res.sendStatus(400).json({ message: "No jwt sent!" });
+    }
+    const verifiedToken = await verifyToken(accessToken);
+    if (!verifiedToken) {
+      return res.status(403).json({ message: "Invalid jwt!" });
+    }
+    const username = (verifiedToken as JwtPayload).username;
+    if (!(username && password)) {
+      return res
+        .status(401)
+        .json({ message: "Username and/or Password are missing!" });
+    }
+    const isMatch = await _verifyUserCredentials(username, password);
+    if (!isMatch) {
+      return res
+        .status(403)
+        .json({ message: "Invalid Username and/or Password!" });
+    }
+    const success = await _deleteUser(username);
+    if (success) {
+      return res.status(200).json({ message: "User successfully deleted!" });
+    } else {
+      return res.status(500).json({ message: "User unable to be deleted!" });
     }
   }
 }
