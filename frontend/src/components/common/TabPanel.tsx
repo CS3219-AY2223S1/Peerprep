@@ -1,5 +1,5 @@
-import { Box } from '@mui/material';
-import React from 'react';
+import { Box } from "@mui/material";
+import React from "react";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -14,6 +14,7 @@ const TabPanel: React.FC<TabPanelProps> = ({
   ...props
 }) => (
   <div
+    className="h-full "
     role="tabpanel"
     hidden={value !== index}
     id={`simple-tabpanel-${index}`}

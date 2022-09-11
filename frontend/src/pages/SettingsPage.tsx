@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   Box,
   Button,
@@ -11,14 +11,14 @@ import {
   Tab,
   Tabs,
   TextField,
-} from '@mui/material';
-import NavBar from '../components/common/NavBar';
-import TabPanel from '../components/common/TabPanel';
+} from "@mui/material";
+import NavBar from "../components/common/NavBar";
+import TabPanel from "../components/common/TabPanel";
 
 export default () => {
   const [value, setValue] = useState(0);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [password, setPassword] = useState('');
+  const [password, setPassword] = useState("");
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
@@ -27,35 +27,34 @@ export default () => {
 
   const a11yProps = (index: number) => ({
     id: `simple-tab-${index}`,
-    'aria-controls': `simple-tabpanel-${index}`,
+    "aria-controls": `simple-tabpanel-${index}`,
   });
   return (
-    <div>
+    <div className="h-96">
       <NavBar />
-      <div className="flex justify-center content-center flex-col grow h-max space-y-8 w-1/3 m-auto">
-        <Box height="30" />
-      </div>
-      <div className="flex justify-center content-center flex-col grow h-max space-y-8 w-1/3 m-auto">
-        <Card variant="outlined">
-          <Box sx={{ width: '100%' }}>
-            <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-              <Tabs value={value} onChange={handleChange}>
-                <Tab label="Profile Settings" {...a11yProps(0)} />
-                <Tab label="Account Settings" {...a11yProps(1)} />
-              </Tabs>
-              <TabPanel value={value} index={0}>
-                Profile stuff
-              </TabPanel>
-              <TabPanel value={value} index={1}>
-                <Button
-                  onClick={() => {
-                    setIsDialogOpen(true);
-                  }}
-                >
-                  Delete Account
-                </Button>
-              </TabPanel>
-            </Box>
+      <div className="flex justify-center inset-x-0 flex-col grow h-full space-y-8 w-1/3 m-auto mt-5">
+        <Card variant="outlined" className="h-full">
+          <Box
+            className="h-full w-full"
+            sx={{ borderBottom: 1, borderColor: "divider" }}
+          >
+            <Tabs value={value} onChange={handleChange}>
+              <Tab label="Profile Settings" {...a11yProps(0)} />
+              <Tab label="Account Settings" {...a11yProps(1)} />
+            </Tabs>
+            <TabPanel value={value} index={0}>
+              Profile stuff
+            </TabPanel>
+            <TabPanel value={value} index={1}>
+              <Button
+                className="mb-5"
+                onClick={() => {
+                  setIsDialogOpen(true);
+                }}
+              >
+                Delete Account
+              </Button>
+            </TabPanel>
           </Box>
         </Card>
 
@@ -73,7 +72,7 @@ export default () => {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              sx={{ marginTop: '2rem', marginBottom: '2rem' }}
+              sx={{ marginTop: "2rem", marginBottom: "2rem" }}
             />
           </DialogContent>
           <DialogActions>
