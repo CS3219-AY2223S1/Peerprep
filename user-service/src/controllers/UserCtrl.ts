@@ -1,14 +1,16 @@
 import { Request, Response } from "express";
-import { Post } from "@tsed/schema";
+import { Post, string } from "@tsed/schema";
 import { Controller } from "@tsed/di";
-import jwt from "jsonwebtoken";
+import jwt, { JwtPayload } from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import {
   ormCreateUser as _createUser,
   ormCheckUserExist as _checkUserExist,
+  ormDeleteUser as _deleteUser,
   ormVerifyUserCredentials as _verifyUserCredentials,
   ormGetUserId as _getUserId,
 } from "../model/user-orm";
+import { verifyToken } from "./AuthMiddleware";
 
 @Controller("/user")
 export default class UserCtrl {
@@ -63,7 +65,10 @@ export default class UserCtrl {
         const isMatch = await _verifyUserCredentials(username, password);
         if (isMatch) {
           const userId = await _getUserId(username);
-          const user = { username: username, id: userId };
+          const user = {
+            username: username,
+            id: userId,
+          };
           const accessToken = jwt.sign(user, process.env.LOGIN_SECRET_KEY!, {
             expiresIn: 60 * 60 * 24,
           }); // expires in 24 hours
@@ -71,10 +76,11 @@ export default class UserCtrl {
             message: `Logged in as ${username} successfully!`,
             accessToken: accessToken,
           });
+        } else {
+          return res
+            .status(403)
+            .json({ message: "Invalid Username and/or Password!" });
         }
-        return res
-          .status(403)
-          .json({ message: "Invalid Username and/or Password!" });
       }
       return res
         .status(401)
@@ -86,36 +92,58 @@ export default class UserCtrl {
     }
   }
 
-  // @Post("/verify")
-  // async verifyUser(req: Request, res: Response) {
-  //   try {
-  //     // const authHeader = req.headers['authorization'];
-  //     // const token = authHeader && authHeader.split(' ')[1];
-  //     const token = req.body;
-  //     if (token === null) {
-  //       return res.sendStatus(401);
-  //     }
-  //     const accessToken = token || 'WRONG';
-  //     jwt.verify(accessToken, process.env.LOGIN_SECRET_KEY || 'WRONG', (err, user) => {
-  //       if (err) {
-  //         return res.sendStatus(403);
-  //       }
-  //       console.log(user);
-  //       // If no error
-  //       // const { username, password } = user
-  //       // if (username && password) {
-  //       //   const isMatch = await _verifyUserCredentials(username, password);
-  //       //   if (isMatch) {
-  //       //     return res.status(200).json({ message: `Logged in as ${username} successfully!`});
-  //       //   }
-  //       //   return res.status(401).json({ message: 'Invalid Username and/or Password!'});
-  //       // }
-  //       // return res.status(400).json({ message: 'Username and/or Password are missing!' });
+  @Post("/verify")
+  async verifyUser(req: Request, res: Response) {
+    const token = req.body.accessToken;
+    if (token) {
+      const verifiedToken = await verifyToken(token);
+      if (verifiedToken) {
+        const user = {
+          username: (verifiedToken as JwtPayload).username,
+          id: (verifiedToken as JwtPayload).id,
+        };
+        const newToken = jwt.sign(user, process.env.LOGIN_SECRET_KEY!, {
+          expiresIn: 60 * 60 * 24,
+        });
+        return res.status(200).json({
+          message: "User successfully verified!",
+          accessToken: newToken,
+        });
+      } else {
+        return res.status(403).json({ message: "Invalid jwt!" });
+      }
+    } else if (!token) {
+      return res.sendStatus(401).json({ message: "No user stored in cookie!" });
+    }
+  }
 
-  //     })
-  //     } catch (err) {
-  //       return res.status(500).json({ message: 'Database failure when signing in user!' });
-  //     }
-
-  // }
+  @Post("/delete")
+  async deleteUser(req: Request, res: Response) {
+    const { password, accessToken } = req.body;
+    if (!accessToken) {
+      return res.sendStatus(400).json({ message: "No jwt sent!" });
+    }
+    const verifiedToken = await verifyToken(accessToken);
+    if (!verifiedToken) {
+      return res.status(403).json({ message: "Invalid jwt!" });
+    }
+    const username = (verifiedToken as JwtPayload).username;
+    if (!(username && password)) {
+      return res
+        .status(401)
+        .json({ message: "Username and/or Password are missing!" });
+    }
+    const isMatch = await _verifyUserCredentials(username, password);
+    if (!isMatch) {
+      return res
+        .status(403)
+        .json({ message: "Invalid Username and/or Password!" });
+    }
+    const success = await _deleteUser(username);
+    if (success) {
+      return res.status(200).json({ message: "User successfully deleted!" });
+    } else {
+      return res.status(500).json({ message: "User unable to be deleted!" });
+    }
+  }
 }
