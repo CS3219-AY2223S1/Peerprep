@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   Box,
   Button,
@@ -11,14 +11,14 @@ import {
   Tab,
   Tabs,
   TextField,
-} from "@mui/material";
-import NavBar from "../components/common/NavBar";
-import TabPanel from "../components/common/TabPanel";
+} from '@mui/material';
+import NavBar from '../components/common/NavBar';
+import TabPanel from '../components/common/TabPanel';
 
 export default () => {
   const [value, setValue] = useState(0);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [password, setPassword] = useState("");
+  const [password, setPassword] = useState('');
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
@@ -27,7 +27,7 @@ export default () => {
 
   const a11yProps = (index: number) => ({
     id: `simple-tab-${index}`,
-    "aria-controls": `simple-tabpanel-${index}`,
+    'aria-controls': `simple-tabpanel-${index}`,
   });
   return (
     <div className="h-96">
@@ -36,10 +36,12 @@ export default () => {
         <Card variant="outlined" className="h-full">
           <Box
             className="h-full w-full"
-            sx={{ borderBottom: 1, borderColor: "divider" }}
+            sx={{ borderBottom: 1, borderColor: 'divider' }}
           >
             <Tabs value={value} onChange={handleChange}>
+              {/* eslint-disable-next-line react/jsx-props-no-spreading */}
               <Tab label="Profile Settings" {...a11yProps(0)} />
+              {/* eslint-disable-next-line react/jsx-props-no-spreading */}
               <Tab label="Account Settings" {...a11yProps(1)} />
             </Tabs>
             <TabPanel value={value} index={0}>
@@ -72,7 +74,7 @@ export default () => {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              sx={{ marginTop: "2rem", marginBottom: "2rem" }}
+              sx={{ marginTop: '2rem', marginBottom: '2rem' }}
             />
           </DialogContent>
           <DialogActions>
