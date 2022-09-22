@@ -2,6 +2,7 @@ import {
   createUser,
   deleteUser,
   getId,
+  updateUserPassword,
   isUsernameAndPasswordMatch,
   isUsernameExist,
 } from "./repository";
@@ -25,6 +26,19 @@ export async function ormDeleteUser(username: string) {
     return true;
   } catch (err) {
     console.log("ERROR: Could not delete user");
+    return false;
+  }
+}
+
+export async function ormUpdateUserPassword(
+  username: string,
+  password: string
+) {
+  try {
+    await updateUserPassword(username, password);
+    return true;
+  } catch (err) {
+    console.log("ERROR: Could not update user password");
     return false;
   }
 }
