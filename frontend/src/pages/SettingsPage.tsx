@@ -14,13 +14,45 @@ import {
 } from "@mui/material";
 import NavBar from "../components/common/NavBar";
 import TabPanel from "../components/common/TabPanel";
+import axios from "axios";
+import { useAuthContext } from "../contexts/AuthContext";
+import { URL_USER_DELETE_SVC } from "../configs";
+import {
+  STATUS_CODE_FORBIDDEN,
+  STATUS_CODE_INVALID,
+  STATUS_CODE_MISSING,
+  STATUS_CODE_SUCCESS,
+} from "../constants";
 
 export default () => {
+  const { dispatch, cookie, removeCookie } = useAuthContext();
   const [value, setValue] = useState(0);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [password, setPassword] = useState("");
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
+  };
+
+  const handleDelete = async () => {
+    const accessToken = cookie.userCred;
+    const res = await axios
+      .post(URL_USER_DELETE_SVC, { password, accessToken })
+      .catch((err) => {
+        if (err.response.status === STATUS_CODE_FORBIDDEN) {
+          alert("Invalid Username and/or Password!");
+        } else if (err.response.status === STATUS_CODE_INVALID) {
+          alert("Username and/or Password are missing!");
+        } else if (err.response.status === STATUS_CODE_MISSING) {
+          alert("No jwt sent!");
+        } else {
+          alert("Internal server error");
+        }
+      });
+    if (res && res.status === STATUS_CODE_SUCCESS) {
+      closeDialog();
+      removeCookie("userCred", { path: "/" });
+      dispatch({ type: "LOGOUT" });
+    }
   };
 
   const closeDialog = () => setIsDialogOpen(false);
@@ -76,7 +108,9 @@ export default () => {
             />
           </DialogContent>
           <DialogActions>
-            <Button component="button">Delete</Button>
+            <Button component="button" onClick={handleDelete}>
+              Delete
+            </Button>
             <Button onClick={closeDialog}>Cancel</Button>
           </DialogActions>
         </Dialog>
