@@ -28,6 +28,19 @@ export async function deleteUser(username: string) {
     });
 }
 
+export async function updateUserPassword(username: string, password: string) {
+  await UserModel.findOneAndUpdate(
+    { username: username },
+    { password: password }
+  )
+    .then(() => {
+      console.log("user password updated!");
+    })
+    .catch((Error) => {
+      return Error;
+    });
+}
+
 export async function isUsernameExist(username: string) {
   // return 1 if username exists else 0
   return UserModel.find({ username }, "_id").count();

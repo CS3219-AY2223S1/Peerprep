@@ -9,6 +9,7 @@ import {
   ormDeleteUser as _deleteUser,
   ormVerifyUserCredentials as _verifyUserCredentials,
   ormGetUserId as _getUserId,
+  ormUpdateUserPassword as _updateUserPassword,
 } from "../model/user-orm";
 import { verifyToken } from "./AuthMiddleware";
 
@@ -121,7 +122,7 @@ export default class UserCtrl {
   async deleteUser(req: Request, res: Response) {
     const { password, accessToken } = req.body;
     if (!accessToken) {
-      return res.sendStatus(400).json({ message: "No jwt sent!" });
+      return res.status(400).json({ message: "No jwt sent!" });
     }
     const verifiedToken = await verifyToken(accessToken);
     if (!verifiedToken) {
@@ -144,6 +145,56 @@ export default class UserCtrl {
       return res.status(200).json({ message: "User successfully deleted!" });
     } else {
       return res.status(500).json({ message: "User unable to be deleted!" });
+    }
+  }
+
+  @Post("/change_password")
+  async changeUserPassword(req: Request, res: Response) {
+    const { password, newPassword, accessToken } = req.body;
+    if (password === newPassword) {
+      return res
+        .status(409)
+        .json({ message: "New password cannot be the same as old password!" });
+    }
+    if (!accessToken) {
+      return res.status(400).json({ message: "No jwt sent!" });
+    }
+    const verifiedToken = await verifyToken(accessToken);
+    if (!verifiedToken) {
+      return res.status(403).json({ message: "Invalid jwt!" });
+    }
+    const username = (verifiedToken as JwtPayload).username;
+    if (!(username && password)) {
+      return res
+        .status(401)
+        .json({ message: "Username and/or Password are missing!" });
+    }
+    const isMatch = await _verifyUserCredentials(username, password);
+    if (!isMatch) {
+      return res
+        .status(403)
+        .json({ message: "Invalid Username and/or Password!" });
+    }
+    // Hash the password with a cost factor of 10
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    const success = await _updateUserPassword(username, hashedPassword);
+    if (success) {
+      const userId = await _getUserId(username);
+      const user = {
+        username: username,
+        id: userId,
+      };
+      const accessToken = jwt.sign(user, process.env.LOGIN_SECRET_KEY!, {
+        expiresIn: 60 * 60 * 24,
+      }); // expires in 24 hours
+      return res.status(200).json({
+        message: "User password successfully updated!",
+        accessToken: accessToken,
+      });
+    } else {
+      return res
+        .status(500)
+        .json({ message: "User password unable to be updated!" });
     }
   }
 }
