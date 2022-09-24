@@ -48,6 +48,7 @@ export default () => {
           alert("Internal server error");
         }
       });
+    if (res && res.status === STATUS_CODE_SUCCESS) {
       closeDialog();
       removeCookie("userCred", { path: "/" });
       dispatch({ type: "LOGOUT" });
