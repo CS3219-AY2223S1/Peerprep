@@ -1,6 +1,7 @@
 import React from 'react';
 import {
   AppBar,
+  Box,
   Toolbar,
   IconButton,
   Typography,
@@ -38,17 +39,21 @@ const NavBar = () => {
   const handleSettings = () => {
     navigate('/settings');
   };
+
+  const handleLogoClick = () => { navigate('/match'); };
   return (
     <AppBar position="static">
       <Toolbar>
-        <IconButton size="large" edge="start" color="inherit" aria-label="logo">
-          <PeopleAltIcon />
-        </IconButton>
-        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-          PEERPREP
-        </Typography>
+        <Box sx={{ flexGrow: 1 }}>
+          <IconButton size="large" edge="start" color="inherit" aria-label="logo" onClick={handleLogoClick}>
+            <PeopleAltIcon />
+            <Typography variant="h6" component="div" marginLeft="1rem">
+              PEERPREP
+            </Typography>
+          </IconButton>
+        </Box>
         <Stack direction="row" spacing={2}>
-          <Button color="inherit">Find an Interview Partner</Button>
+          <Button onClick={handleLogoClick} color="inherit">Find an Interview Partner</Button>
           <Button
             color="inherit"
             onClick={handleClick}
