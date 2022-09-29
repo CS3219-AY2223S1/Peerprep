@@ -21,7 +21,7 @@ const TabPanel: React.FC<TabPanelProps> = ({
     aria-labelledby={`simple-tab-${index}`}
     {...props}
   >
-    {value === index && <Box flexGrow="1" p={3}>{children}</Box>}
+    {value === index && <Box p={3}>{children}</Box>}
   </div>
 );
 
