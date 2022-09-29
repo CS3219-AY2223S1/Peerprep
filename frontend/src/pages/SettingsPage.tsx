@@ -27,7 +27,8 @@ export default () => {
     dispatch, cookie, removeCookie, setCookie,
   } = useAuthContext();
   const [value, setValue] = useState(0);
-  const [password, setPassword] = useState('');
+  const [deletePassword, setDeletePassword] = useState('');
+  const [changePWPassword, setChangePWPassword] = useState('');
   const [newPassword1, setNewPassword1] = useState('');
   const [newPassword2, setNewPassword2] = useState('');
   const [changePWAlertStatus, setChangePWAlertStatus] = useState(0);
@@ -45,7 +46,7 @@ export default () => {
   const handleDelete = async () => {
     const accessToken = cookie.userCred;
     const res = await axios
-      .post(URL_USER_DELETE_SVC, { password, accessToken })
+      .post(URL_USER_DELETE_SVC, { password: deletePassword, accessToken })
       .catch((err) => {
         if (err.response.status === STATUS_CODE_FORBIDDEN) {
           handleDeleteAlert(1, 'Invalid Password!');
@@ -66,7 +67,7 @@ export default () => {
   };
 
   const handleChangePassword = async () => {
-    if (password === '' || newPassword1 === '' || newPassword2 === '') {
+    if (deletePassword === '' || newPassword1 === '' || newPassword2 === '') {
       handleChangePWAlert(true, 'Fields cannot be empty!');
       return;
     }
@@ -74,7 +75,7 @@ export default () => {
       handleChangePWAlert(true, 'New passwords do not match!');
       return;
     }
-    if (newPassword1 === password) {
+    if (newPassword1 === deletePassword) {
       handleChangePWAlert(true, 'New password cannot be the same as old password!');
       return;
     }
@@ -84,7 +85,7 @@ export default () => {
     }
     const accessToken = cookie.userCred;
     const res = await axios
-      .post(URL_USER_CHANGE_PW_SVC, { password, newPassword: newPassword1, accessToken })
+      .post(URL_USER_CHANGE_PW_SVC, { password: deletePassword, newPassword: newPassword1, accessToken })
       .catch((err) => {
         if (err.response.status === STATUS_CODE_FORBIDDEN) {
           handleChangePWAlert(true, 'Invalid Password!');
@@ -154,8 +155,8 @@ export default () => {
                   align-self="center"
                   variant="standard"
                   type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  value={deletePassword}
+                  onChange={(e) => setDeletePassword(e.target.value)}
                   sx={{ marginTop: '1rem', marginBottom: '2rem' }}
                 />
                 <Button
@@ -176,8 +177,8 @@ export default () => {
                   align-self="center"
                   variant="standard"
                   type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  value={changePWPassword}
+                  onChange={(e) => setChangePWPassword(e.target.value)}
                   sx={{ marginTop: '1rem', marginBottom: '1rem' }}
                 />
                 <br />
