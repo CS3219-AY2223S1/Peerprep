@@ -5,6 +5,7 @@ import NavBar from '../components/common/NavBar';
 import { useSocketContext } from '../contexts/SocketContext';
 import { useAuthContext } from '../contexts/AuthContext';
 import Editor from '../components/editor/Editor';
+import Chat from '../components/room/Chat';
 
 export default () => {
   const { partner, roomId } = useSocketContext();
@@ -26,8 +27,14 @@ export default () => {
   return (
     <div className="flex flex-col h-screen">
       <NavBar />
-      <div className="relative h-full overflow-auto">
-        <Editor {...{ text, setText }} />
+      <div className="h-full flex">
+        <div className="relative overflow-auto h-full w-full">
+          <Editor {...{ text, setText }} />
+        </div>
+        <div className="absolute z-1 bottom-14 right-2 w-1/5">
+          <Chat roomId={id} />
+        </div>
+
       </div>
       <Footer partnername={partner} username={user} onLeave={onLeave} />
     </div>

@@ -8,7 +8,7 @@ interface EditorProps {
 }
 
 const Editor = ({ text, setText }: EditorProps) => {
-  const onChange = React.useCallback((value, viewUpdate) => {
+  const onChange = React.useCallback((value, _) => {
     setText(value);
   }, []);
 

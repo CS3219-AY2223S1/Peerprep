@@ -11,18 +11,18 @@ import {
   Tab,
   Tabs,
   TextField,
-} from "@mui/material";
-import NavBar from "../components/common/NavBar";
-import TabPanel from "../components/common/TabPanel";
-import axios from "axios";
-import { useAuthContext } from "../contexts/AuthContext";
-import { URL_USER_DELETE_SVC } from "../configs";
+} from '@mui/material';
+import axios from 'axios';
+import NavBar from '../components/common/NavBar';
+import TabPanel from '../components/common/TabPanel';
+import { useAuthContext } from '../contexts/AuthContext';
+import { URL_USER_DELETE_SVC } from '../configs';
 import {
   STATUS_CODE_FORBIDDEN,
   STATUS_CODE_INVALID,
   STATUS_CODE_MISSING,
   STATUS_CODE_SUCCESS,
-} from "../constants";
+} from '../constants';
 
 export default () => {
   const { dispatch, cookie, removeCookie } = useAuthContext();
@@ -39,19 +39,19 @@ export default () => {
       .post(URL_USER_DELETE_SVC, { password, accessToken })
       .catch((err) => {
         if (err.response.status === STATUS_CODE_FORBIDDEN) {
-          alert("Invalid Username and/or Password!");
+          alert('Invalid Username and/or Password!');
         } else if (err.response.status === STATUS_CODE_INVALID) {
-          alert("Username and/or Password are missing!");
+          alert('Username and/or Password are missing!');
         } else if (err.response.status === STATUS_CODE_MISSING) {
-          alert("No jwt sent!");
+          alert('No jwt sent!');
         } else {
-          alert("Internal server error");
+          alert('Internal server error');
         }
       });
     if (res && res.status === STATUS_CODE_SUCCESS) {
       closeDialog();
-      removeCookie("userCred", { path: "/" });
-      dispatch({ type: "LOGOUT" });
+      removeCookie('userCred', { path: '/' });
+      dispatch({ type: 'LOGOUT' });
     }
   };
 
