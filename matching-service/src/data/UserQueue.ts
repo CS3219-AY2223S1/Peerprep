@@ -20,7 +20,7 @@ class UserQueue {
       return;
     }
     const queue = this.queues.get(difficulty);
-    queue!.push({ userName: user.userName, socketId: socket.id });
+    queue!.push({ userName: user.userName, id: user.id, socketId: socket.id });
     this.userNameToDifficulty.set(user.userName, difficulty);
   }
 

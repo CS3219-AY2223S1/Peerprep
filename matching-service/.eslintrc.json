@@ -1,6 +1,6 @@
 {
   "parser": "@typescript-eslint/parser",
-  "parserOptions": { "project": "./tsconfig.json" },
+  "parserOptions": { "project": "tsconfig.json" },
   "extends": ["airbnb-base", "airbnb-typescript/base"],
   "rules" : {
     "@typescript-eslint/no-use-before-define": "off",
@@ -9,6 +9,7 @@
     "implicit-arrow-linebreak": "off",
     "no-param-reassign":  "off",
     "no-promise-executor-return": "off",
-    "import/prefer-default-export": "off"
+    "import/prefer-default-export": "off",
+    "consistent-return": "off"
   }
 }

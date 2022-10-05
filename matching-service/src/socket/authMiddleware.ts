@@ -12,7 +12,7 @@ export const authMiddleware = (ioServer: Server) => {
         .verify(token, process.env.LOGIN_SECRET_KEY!) as unknown as UserCred;
       sidToUserMap.addUser(
         socket.id,
-        { userName: decoded.username, socketId: socket.id },
+        { userName: decoded.username, id: parseInt(decoded.id, 10), socketId: socket.id },
         ioServer,
       );
       next();
