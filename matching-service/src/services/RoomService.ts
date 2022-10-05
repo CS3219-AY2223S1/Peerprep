@@ -61,7 +61,7 @@ export class RoomService {
     if (room) {
       await prisma.room.update({
         where: {
-          id: userId,
+          id: room.id,
         },
         data: {
           closed: true,
