@@ -25,3 +25,12 @@ export enum SocketEvent {
   UNEXPECTED_QUEUE_ERROR = 'unexpected_queue_error',
   LEAVE_QUEUE = 'leave_queue',
 }
+
+export enum CommunicationSocket {
+  JOIN_ROOM = 'joinRoom',
+  IN_ROOM = 'inRoom',
+  CALL_USER = 'callUser',
+  CALL_ENDED = 'callEnded',
+  CALL_ACCEPTED = 'callAccepted',
+  CALL_ANSWERED = 'answerCall',
+}
