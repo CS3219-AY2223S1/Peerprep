@@ -160,6 +160,120 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "Question Service",
+			"item": [
+				{
+					"name": "Add question",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "title",
+									"value": "Blake",
+									"type": "text"
+								},
+								{
+									"key": "content",
+									"value": "Add x * 10",
+									"type": "text"
+								},
+								{
+									"key": "difficulty",
+									"value": "Hard",
+									"type": "text"
+								},
+								{
+									"key": "input",
+									"value": "1, 2",
+									"type": "text"
+								},
+								{
+									"key": "output",
+									"value": "3",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8003/questions/test/add",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8003",
+							"path": [
+								"questions",
+								"test",
+								"add"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete question",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "title",
+									"value": "Ten",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8003/questions/test/delete",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8003",
+							"path": [
+								"questions",
+								"test",
+								"delete"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get random question",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "difficulty",
+								"value": "Easy peasy",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8003/questions/test/getOne",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8003",
+							"path": [
+								"questions",
+								"test",
+								"getOne"
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		}
 	]
 }
