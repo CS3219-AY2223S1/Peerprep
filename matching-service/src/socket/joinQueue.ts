@@ -21,7 +21,7 @@ export const joinQueue = (socket: Socket, ioServer: Server) =>
     if (userQueue.size(difficulty) >= 2) {
       const u1 = userQueue.pop(difficulty);
       const u2 = userQueue.pop(difficulty);
-      const roomUuid = roomService.create(u1.id, u2.id);
+      const roomUuid = roomService.create(u1, u2, difficulty);
       ioServer
         .to(u1.socketId)
         .emit(Event.MATCHED, { roomUuid, partner: u2.userName });

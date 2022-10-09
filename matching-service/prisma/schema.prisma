@@ -8,11 +8,14 @@ datasource db {
 }
 
 model Room {
-  id         Int      @id @default(autoincrement())
-  uuid       String
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-  userOneId  Int
-  userTwoId Int
-  closed     Boolean  @default(false)
+  id            Int      @id @default(autoincrement())
+  uuid          String
+  difficulty    String
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  userOneId     Int
+  userOneName   String
+  userTwoId     Int
+  userTwoName   String
+  closed        Boolean  @default(false)
 }
