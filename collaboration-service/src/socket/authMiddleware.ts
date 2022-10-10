@@ -1,7 +1,6 @@
 import { Server } from 'socket.io';
 import jwt from 'jsonwebtoken';
 import { UserCred } from '../constants';
-import sidToUserMap from '../data/SidToUserMap';
 
 // TODO: Invalid token still can queue (after changing password)
 export const authMiddleware = (ioServer: Server) => {
@@ -10,11 +9,6 @@ export const authMiddleware = (ioServer: Server) => {
     try {
       const decoded: UserCred = jwt
         .verify(token, process.env.LOGIN_SECRET_KEY!) as unknown as UserCred;
-      sidToUserMap.addUser(
-        socket.id,
-        { userName: decoded.username, id: parseInt(decoded.id, 10), socketId: socket.id },
-        ioServer,
-      );
       next();
     } catch (error) {
       console.log(error);

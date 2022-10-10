@@ -10,13 +10,10 @@ class SidToUserMap {
 
   public addUser(sid: string, user: User, server: Server) {
     const oldSocket = [...this.sidToUserMap.keys()]
-      .find((key) => this.sidToUserMap.get(key)?.userName === user.userName);
+      .find((key) => this.sidToUserMap.get(key)?.id === user.id);
     if (oldSocket) {
       server.in(oldSocket).emit(Event.CONNECTED_ELSEWHERE);
       server.in(oldSocket).disconnectSockets(true);
-      if (user.roomId) {
-        server.in(sid).socketsJoin(user.roomId);
-      }
       this.sidToUserMap.delete(oldSocket);
     }
     this.sidToUserMap.set(sid, user);

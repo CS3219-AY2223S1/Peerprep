@@ -1,8 +1,8 @@
-import { Request, Response } from "express";
-import { Post, string } from "@tsed/schema";
-import { Controller } from "@tsed/di";
-import jwt, { JwtPayload } from "jsonwebtoken";
-import bcrypt from "bcryptjs";
+import { Request, Response } from 'express';
+import { Post, string } from '@tsed/schema';
+import { Controller } from '@tsed/di';
+import jwt, { JwtPayload } from 'jsonwebtoken';
+import bcrypt from 'bcryptjs';
 import {
   ormCreateUser as _createUser,
   ormCheckUserExist as _checkUserExist,
@@ -10,12 +10,12 @@ import {
   ormVerifyUserCredentials as _verifyUserCredentials,
   ormGetUserId as _getUserId,
   ormUpdateUserPassword as _updateUserPassword,
-} from "../model/user-orm";
-import { verifyToken } from "./AuthMiddleware";
+} from '../model/user-orm';
+import { verifyToken } from './authMiddleware';
 
-@Controller("/user")
+@Controller('/user')
 export default class UserCtrl {
-  @Post("/signup")
+  @Post('/signup')
   async createUser(req: Request, res: Response) {
     try {
       const { username, password } = req.body;
@@ -24,13 +24,13 @@ export default class UserCtrl {
 
         const isExist = await _checkUserExist(username);
         if (isExist) {
-          return res.status(409).json({ message: "Account already exists!" });
+          return res.status(409).json({ message: 'Account already exists!' });
         }
 
         if (password.length < 8) {
           return res
             .status(406)
-            .json({ message: "Password must be at least 8 characters long!" });
+            .json({ message: 'Password must be at least 8 characters long!' });
         }
         // Hash the password with a cost factor of 10
         const hashedPassword = await bcrypt.hash(password, 10);
@@ -41,7 +41,7 @@ export default class UserCtrl {
         if (!resp) {
           return res
             .status(400)
-            .json({ message: "Could not create a new user!" });
+            .json({ message: 'Could not create a new user!' });
         }
         console.log(`Created new user ${username} successfully!`);
         return res
@@ -50,15 +50,15 @@ export default class UserCtrl {
       }
       return res
         .status(401)
-        .json({ message: "Username and/or Password are missing!" });
+        .json({ message: 'Username and/or Password are missing!' });
     } catch (err) {
       return res
         .status(500)
-        .json({ message: "Database failure when creating new user!" });
+        .json({ message: 'Database failure when creating new user!' });
     }
   }
 
-  @Post("/login")
+  @Post('/login')
   async loginUser(req: Request, res: Response) {
     try {
       const { username, password } = req.body;
@@ -67,7 +67,7 @@ export default class UserCtrl {
         if (isMatch) {
           const userId = await _getUserId(username);
           const user = {
-            username: username,
+            username,
             id: userId,
           };
           const accessToken = jwt.sign(user, process.env.LOGIN_SECRET_KEY!, {
@@ -75,25 +75,24 @@ export default class UserCtrl {
           }); // expires in 24 hours
           return res.status(200).json({
             message: `Logged in as ${username} successfully!`,
-            accessToken: accessToken,
+            accessToken,
           });
-        } else {
-          return res
-            .status(403)
-            .json({ message: "Invalid Username and/or Password!" });
         }
+        return res
+          .status(403)
+          .json({ message: 'Invalid Username and/or Password!' });
       }
       return res
         .status(401)
-        .json({ message: "Username and/or Password are missing!" });
+        .json({ message: 'Username and/or Password are missing!' });
     } catch (err) {
       return res
         .status(400)
-        .json({ message: "No Username and/or Password sent!" });
+        .json({ message: 'No Username and/or Password sent!' });
     }
   }
 
-  @Post("/verify")
+  @Post('/verify')
   async verifyUser(req: Request, res: Response) {
     const token = req.body.accessToken;
     if (token) {
@@ -107,73 +106,71 @@ export default class UserCtrl {
           expiresIn: 60 * 60 * 24,
         });
         return res.status(200).json({
-          message: "User successfully verified!",
+          message: 'User successfully verified!',
           accessToken: newToken,
         });
-      } else {
-        return res.status(403).json({ message: "Invalid jwt!" });
       }
-    } else if (!token) {
-      return res.sendStatus(401).json({ message: "No user stored in cookie!" });
+      return res.status(403).json({ message: 'Invalid jwt!' });
+    } if (!token) {
+      return res.sendStatus(401).json({ message: 'No user stored in cookie!' });
     }
   }
 
-  @Post("/delete")
+  @Post('/delete')
   async deleteUser(req: Request, res: Response) {
     const { password, accessToken } = req.body;
     if (!accessToken) {
-      return res.status(400).json({ message: "No jwt sent!" });
+      return res.status(400).json({ message: 'No jwt sent!' });
     }
     const verifiedToken = await verifyToken(accessToken);
     if (!verifiedToken) {
-      return res.status(403).json({ message: "Invalid jwt!" });
+      return res.status(403).json({ message: 'Invalid jwt!' });
     }
-    const username = (verifiedToken as JwtPayload).username;
+    const { username } = verifiedToken as JwtPayload;
     if (!(username && password)) {
       return res
         .status(401)
-        .json({ message: "Username and/or Password are missing!" });
+        .json({ message: 'Username and/or Password are missing!' });
     }
     const isMatch = await _verifyUserCredentials(username, password);
     if (!isMatch) {
       return res
         .status(403)
-        .json({ message: "Invalid Username and/or Password!" });
+        .json({ message: 'Invalid Username and/or Password!' });
     }
     const success = await _deleteUser(username);
     if (success) {
-      return res.status(200).json({ message: "User successfully deleted!" });
-    } else {
-      return res.status(500).json({ message: "User unable to be deleted!" });
+      return res.status(200).json({ message: 'User successfully deleted!' });
     }
+    return res.status(500).json({ message: 'User unable to be deleted!' });
   }
 
-  @Post("/change_password")
+  @Post('/change_password')
   async changeUserPassword(req: Request, res: Response) {
     const { password, newPassword, accessToken } = req.body;
     if (password === newPassword) {
       return res
         .status(409)
-        .json({ message: "New password cannot be the same as old password!" });
+        .json({ message: 'New password cannot be the same as old password!' });
     }
     if (!accessToken) {
-      return res.status(400).json({ message: "No jwt sent!" });
+      return res.status(400).json({ message: 'No jwt sent!' });
     }
     const verifiedToken = await verifyToken(accessToken);
     if (!verifiedToken) {
-      return res.status(403).json({ message: "Invalid jwt!" });
+      return res.status(403).json({ message: 'Invalid jwt!' });
     }
-    const username = (verifiedToken as JwtPayload).username;
+    const { username } = verifiedToken as JwtPayload;
     if (!(username && password)) {
       return res
         .status(401)
-        .json({ message: "Username and/or Password are missing!" });
+        .json({ message: 'Username and/or Password are missing!' });
     }
     const isMatch = await _verifyUserCredentials(username, password);
     if (!isMatch) {
       return res
         .status(403)
-        .json({ message: "Invalid Username and/or Password!" });
+        .json({ message: 'Invalid Username and/or Password!' });
     }
     // Hash the password with a cost factor of 10
     const hashedPassword = await bcrypt.hash(newPassword, 10);
@@ -181,20 +178,19 @@ export default class UserCtrl {
     if (success) {
       const userId = await _getUserId(username);
       const user = {
-        username: username,
+        username,
         id: userId,
       };
       const accessToken = jwt.sign(user, process.env.LOGIN_SECRET_KEY!, {
         expiresIn: 60 * 60 * 24,
       }); // expires in 24 hours
       return res.status(200).json({
-        message: "User password successfully updated!",
-        accessToken: accessToken,
+        message: 'User password successfully updated!',
+        accessToken,
       });
-    } else {
-      return res
-        .status(500)
-        .json({ message: "User password unable to be updated!" });
     }
+    return res
+      .status(500)
+      .json({ message: 'User password unable to be updated!' });
   }
 }

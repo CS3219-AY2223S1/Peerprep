@@ -47,7 +47,7 @@ export const SocketContextProvider: React.FC<ProviderProps> = ({ children }) => 
   // load socket if there is cookie
   const socket = useMemo<Socket>(() => {
     if (cookie.userCred) {
-      return io('http://localhost:8001', { auth: { token: cookie.userCred } });
+      return io('http://localhost:8001', { path: '/match', auth: { token: cookie.userCred } });
     }
     return null;
   }, [cookie]);
