@@ -48,7 +48,7 @@ export class RoomService {
         id: 'desc',
       },
     });
-    const partnerName = userId === room?.userOneId ? room?.userOneName : room?.userTwoName;
+    const partnerName = userId === room?.userOneId ? room?.userTwoName : room?.userOneName;
     return (!!room && !room?.closed) ? { difficulty: room.difficulty, partnerName, uuid: room.uuid }
       : null;
   }
