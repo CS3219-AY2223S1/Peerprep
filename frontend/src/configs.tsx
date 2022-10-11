@@ -21,4 +21,6 @@ export const URL_QUESTION_GET_RANDOM = `${
   URI_QUESTION_SVC + PREFIX_QUESTION_SVC
 }/getOne`;
 
-export const URL_GET_ROOM_UUID = `${URI_SOCKET_SVC}/room/roomUuid`;
+export const URL_GET_ROOM_UUID = `${URI_SOCKET_SVC}/room/roomInfo`;
+
+export const URL_LEAVE_ROOM = `${URI_SOCKET_SVC}/room/leaveRoom`;

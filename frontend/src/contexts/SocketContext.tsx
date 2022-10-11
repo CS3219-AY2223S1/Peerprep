@@ -24,16 +24,17 @@ interface Action {
 }
 
 interface State {
-  partner: string;
-  roomId: Number;
+  partner: String;
+  roomUuid: String;
+  difficulty: String;
 }
 
 const socketReducer = (state: State, action: Action) => {
   switch (action.type) {
     case 'MATCHED':
-      return { partner: action.payload.partner, roomId: action.payload.roomId };
+      return { partner: action.payload.partner, roomUuid: action.payload.roomUuid, difficulty: action.payload.difficulty };
     case 'DISCONNECT':
-      return { partner: null, roomId: null };
+      return { partner: null, roomUuid: null, difficulty: null };
     default:
       return state;
   }
@@ -42,7 +43,7 @@ const socketReducer = (state: State, action: Action) => {
 export const SocketContextProvider: React.FC<ProviderProps> = ({ children }) => {
   const { cookie } = useAuthContext();
   const [state, dispatch] = useReducer(socketReducer, {
-    partner: null, roomId: null,
+    partner: null, roomUuid: null, difficulty: null,
   });
   // load socket if there is cookie
   const socket = useMemo<Socket>(() => {

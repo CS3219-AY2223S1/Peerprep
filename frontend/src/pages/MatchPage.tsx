@@ -14,7 +14,7 @@ import {
 } from '../constants';
 import { ConnectedElseWhereModal, AlreadyInQueueModal } from '../components';
 import { useSocketContext } from '../contexts/SocketContext';
-import { URL_GET_ROOM_UUID, URL_USER_SIGNUP_SVC } from '../configs';
+import { URL_GET_ROOM_UUID } from '../configs';
 
 export default () => {
   const { user, cookie } = useAuthContext();
@@ -22,26 +22,40 @@ export default () => {
   const [isConnectedElsewhere, setIsConnectedElsewhere] = useState<boolean>(false);
   const [isInQueue, setisInQueue] = useState<boolean>(false);
   const [timer, setTimer] = useState<number>(0);
+  const { roomUuid } = useSocketContext();
   const navigate = useNavigate();
 
   useEffect(() => {
     // Example
-    const fetchData = async () => {
-      const accessToken = cookie.userCred;
-      const res = await axios
-        .get(URL_GET_ROOM_UUID, { headers: { authorization: accessToken } })
-        .catch((err) => {
-          console.log(err);
-        });
-      console.log(res);
-    };
     fetchData();
+    if (roomUuid) {
+      navigate(`/room/${roomUuid}`);
+    }
   }, []);
 
+  const fetchData = async () => {
+    const accessToken = cookie.userCred;
+    const res = await axios
+      .get(URL_GET_ROOM_UUID, { headers: { authorization: accessToken } })
+      .catch((err) => {
+        console.log(err);
+      });
+    if (res && res.data) {
+      dispatch({
+        type: 'MATCHED',
+        payload: {
+          partner: res.data.partnerName,
+          roomUuid: res.data.uuid,
+          difficulty: res.data.difficulty,
+        },
+      });
+      navigate(`/room/${roomUuid}`);
+    }
+  };
+
   useEffect(() => {
-    socket.on(SocketEvent.MATCHED, (data: { partner: String, roomId: Number }) => {
-      dispatch({ type: 'MATCHED', payload: { partner: data.partner, roomId: data.roomId } });
-      navigate(`/room/${data.roomId}`);
+    socket.on(SocketEvent.MATCHED, () => {
+      fetchData();
     });
 
     socket.on(SocketEvent.CONNECTED_ELSEWHERE, () => {

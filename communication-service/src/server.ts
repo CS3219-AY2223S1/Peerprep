@@ -35,26 +35,27 @@ export default class SocketServer {
       },
     });
 
-    socketIoServer.on("connection", (socket) => {
-      socket.on("joinRoom", (data) => {
-        socket.join(data.roomId);
-        const sockets = socketIoServer.sockets.sockets;
+    socketIoServer.on('connection', (socket) => {
+      socket.on('joinRoom', (data) => {
+        socket.join(data.roomUuid);
+        const { sockets } = socketIoServer.sockets;
         if (sockets && sockets.size > 1) {
-          socket.to(data.roomId).emit("inRoom", { user: data.user });
+          socket.to(data.roomUuid).emit('inRoom', { user: data.user });
         }
       });
 
-      socket.on("disconnect", () => {
-        socket.broadcast.emit("callEnded");
+      socket.on('disconnect', () => {
+        socket.broadcast.emit('callEnded');
       });
 
-      socket.on("callUser", (data) => {
-        socket.to(data.roomToCall).emit("callUser", { signal: data.signalData });
-      })
+      socket.on('callUser', (data) => {
+        socket.to(data.roomToCall).emit('callUser', { signal: data.signalData });
+      });
 
-      socket.on("answerCall", (data) => socket.to(data.to).emit("callAccepted", data.signal));
+      socket.on('answerCall', (data) => socket.to(data.to).emit('callAccepted', data.signal));
     });
-
+    // TODO
+    // authMiddleware(socketIoServer);
     return { httpServer, socketIoServer };
   }
 

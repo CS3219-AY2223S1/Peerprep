@@ -1,23 +1,19 @@
 import React, { useEffect, useRef, useState } from 'react';
 import io from 'socket.io-client';
 import Peer from 'simple-peer';
-import { useNavigate } from 'react-router-dom';
 import { useAuthContext } from '../../contexts/AuthContext';
 import { CommunicationSocket } from '../../constants';
+import { useSocketContext } from '../../contexts/SocketContext';
 
 const socket = io('http://localhost:8002');
 
-interface ChatProps {
-  roomId: string;
-}
-
-const Chat = ({ roomId }: ChatProps) => {
+const Chat = () => {
   const [stream, setStream] = useState<MediaStream>();
   const myVideo = useRef<HTMLVideoElement>();
   const userVideo = useRef<HTMLVideoElement>();
   const connectionRef = useRef<any>();
+  const { roomUuid } = useSocketContext();
   const { user } = useAuthContext();
-  const navigate = useNavigate();
 
   useEffect(() => {
     navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then((curStream) => {
@@ -27,7 +23,9 @@ const Chat = ({ roomId }: ChatProps) => {
   }, []);
 
   useEffect(() => {
-    socket.emit(CommunicationSocket.JOIN_ROOM, { roomId, user });
+    if (roomUuid) {
+      socket.emit(CommunicationSocket.JOIN_ROOM, { roomUuid, user });
+    }
     socket.on(CommunicationSocket.IN_ROOM, (data) => {
       if (data.user !== user && stream) {
         callUser();
@@ -55,7 +53,7 @@ const Chat = ({ roomId }: ChatProps) => {
 
     peer.on('signal', (data) => {
       socket.emit(CommunicationSocket.CALL_USER, {
-        roomToCall: roomId,
+        roomToCall: roomUuid,
         signalData: data,
       });
     });
@@ -81,7 +79,7 @@ const Chat = ({ roomId }: ChatProps) => {
     peer.on('signal', (data) => {
       socket.emit(CommunicationSocket.CALL_ANSWERED, {
         signal: data,
-        to: roomId,
+        to: roomUuid,
       });
     });
 
@@ -93,16 +91,14 @@ const Chat = ({ roomId }: ChatProps) => {
     connectionRef.current = peer;
   };
 
-  const leaveCall = () => {
-    connectionRef.current.destroy();
-    if (userVideo.current.srcObject) userVideo.current.srcObject = null;
-    navigate('/match');
+  const handleDisconnect = () => {
+    leaveCall();
+    window.location.reload();
   };
 
-  const handleDisconnect = () => {
-    connectionRef.current.destroy();
+  const leaveCall = () => {
+    if (connectionRef.current) connectionRef.current.destroy();
     if (userVideo.current.srcObject) userVideo.current.srcObject = null;
-    window.location.reload();
   };
 
   return (
