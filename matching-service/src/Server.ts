@@ -4,6 +4,7 @@ import http, { Server as httpServer } from 'http';
 import { Server } from 'socket.io';
 import { Event } from './constants';
 import { joinQueue, authMiddleware, leaveQueue } from './socket';
+import roomRouter from './routes/room';
 
 export default class SocketServer {
   private httpServer: httpServer;
@@ -22,6 +23,7 @@ export default class SocketServer {
     app.use(express.json());
     app.use(cors()); // config cors so that front-end can use
     app.options('*', cors());
+    app.use('/room', roomRouter);
     return app;
   }
 
@@ -30,7 +32,7 @@ export default class SocketServer {
     const httpServer = http.createServer(app);
 
     const socketIoServer = new Server(httpServer, {
-      path: '/',
+      path: '/match',
       cors: {
         origin: '*',
         methods: ['GET'],

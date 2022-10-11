@@ -1,14 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import { Button, CircularProgress, Box } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import { useAuthContext } from '../contexts/AuthContext';
 import NavBar from '../components/common/NavBar';
-import { Difficulty, Match, SocketEvent } from '../constants';
+import {
+  Difficulty,
+  Match,
+  SocketEvent,
+  STATUS_CODE_CONFLICT,
+  STATUS_CODE_INVALID,
+  STATUS_CODE_UNAUTHORISED,
+} from '../constants';
 import { ConnectedElseWhereModal, AlreadyInQueueModal } from '../components';
 import { useSocketContext } from '../contexts/SocketContext';
+import { URL_GET_ROOM_UUID, URL_USER_SIGNUP_SVC } from '../configs';
 
 export default () => {
-  const { user } = useAuthContext();
+  const { user, cookie } = useAuthContext();
   const { socket, dispatch } = useSocketContext();
   const [isConnectedElsewhere, setIsConnectedElsewhere] = useState<boolean>(false);
   const [isInQueue, setisInQueue] = useState<boolean>(false);
@@ -16,10 +25,25 @@ export default () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    // Example
+    const fetchData = async () => {
+      const accessToken = cookie.userCred;
+      const res = await axios
+        .get(URL_GET_ROOM_UUID, { headers: { authorization: accessToken } })
+        .catch((err) => {
+          console.log(err);
+        });
+      console.log(res);
+    };
+    fetchData();
+  }, []);
+
+  useEffect(() => {
     socket.on(SocketEvent.MATCHED, (data: { partner: String, roomId: Number }) => {
       dispatch({ type: 'MATCHED', payload: { partner: data.partner, roomId: data.roomId } });
       navigate(`/room/${data.roomId}`);
     });
+
     socket.on(SocketEvent.CONNECTED_ELSEWHERE, () => {
       setIsConnectedElsewhere(true);
     });
