@@ -16,6 +16,7 @@
     "@tsed/platform-express": "^6.133.1",
     "@types/cors": "^2.8.12",
     "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
     "express": "^4.18.1",
     "mongoose": "^6.6.5",
     "mongoose-sequence": "^5.3.1",
