@@ -6,6 +6,7 @@
     "react/jsx-filename-extension": [2, { "extensions": [".js", ".jsx", ".ts", ".tsx"] }],
     "react/function-component-definition": [2, { "namedComponents": ["arrow-function", "function-declaration"], "unnamedComponents": "arrow-function" }],
     "@typescript-eslint/no-use-before-define": "off",
-    "import/prefer-default-export": "off"
+    "import/prefer-default-export": "off",
+    "@typescript-eslint/no-shadow": "off"
   }
 }

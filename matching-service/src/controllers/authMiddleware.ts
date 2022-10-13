@@ -6,12 +6,14 @@ export const auth = (req: Request, res: Response, next: NextFunction) => {
   try {
     // TODO: Call API => to verify token
     const token = req.headers.authorization;
-    if (token == null) return res.sendStatus(401);
+    if (token === undefined) {
+      return res.sendStatus(401);
+    }
     const decoded = jwt
       .verify(token, process.env.LOGIN_SECRET_KEY!);
     req.userCred = decoded as unknown as UserCred;
     next();
-  } catch {
+  } catch (error) {
     return res.sendStatus(403);
   }
 };
