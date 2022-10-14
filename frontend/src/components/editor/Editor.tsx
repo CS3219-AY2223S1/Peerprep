@@ -1,6 +1,7 @@
-import React from 'react';
-import CodeMirror from '@uiw/react-codemirror';
-import { python } from '@codemirror/lang-python';
+import React from "react";
+import CodeMirror from "@uiw/react-codemirror";
+import { EditorView } from "@codemirror/view";
+import { python } from "@codemirror/lang-python";
 
 interface EditorProps {
   text: string;
@@ -21,7 +22,7 @@ const Editor = ({ text, setText }: EditorProps) => {
       theme="dark"
       height="100%"
       placeholder="print('Hello world')"
-      extensions={[python()]}
+      extensions={[python(), EditorView.lineWrapping]}
     />
   );
 };

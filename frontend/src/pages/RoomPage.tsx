@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import Footer from '../components/room/Footer';
-import NavBar from '../components/common/NavBar';
-import { useSocketContext } from '../contexts/SocketContext';
-import { useAuthContext } from '../contexts/AuthContext';
-import Editor from '../components/editor/Editor';
-import Chat from '../components/room/Chat';
-import { URL_GET_ROOM_UUID, URL_LEAVE_ROOM } from '../configs';
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import Footer from "../components/room/Footer";
+import NavBar from "../components/common/NavBar";
+import { useSocketContext } from "../contexts/SocketContext";
+import { useAuthContext } from "../contexts/AuthContext";
+import Editor from "../components/editor/Editor";
+import Chat from "../components/room/Chat";
+import { URL_GET_ROOM_UUID, URL_LEAVE_ROOM } from "../configs";
 
 export default () => {
   const { partner, dispatch } = useSocketContext();
@@ -26,7 +26,7 @@ export default () => {
       });
     if (res && res.data) {
       dispatch({
-        type: 'MATCHED',
+        type: "MATCHED",
         payload: {
           partner: res.data.partnerName,
           roomUuid: res.data.uuid,

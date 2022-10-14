@@ -1,6 +1,9 @@
-import { Card, CardContent, Button } from '@mui/material';
+import {
+  Card, CardContent, Button, Box,
+} from '@mui/material';
 import { CircleRounded } from '@mui/icons-material';
 import React from 'react';
+import QuestionModal from './QuestionModal';
 
 export interface FooterProps {
   username: String;
@@ -17,15 +20,26 @@ const Footer = ({ username, partnername, onLeave }: FooterProps) => (
             <CircleRounded className="text-green-500" />
             {` ${username}`}
           </div>
-        ) : null }
+        ) : null}
         {partnername ? (
           <div>
             <CircleRounded className="text-green-500" />
             {` ${partnername}`}
           </div>
-        ) : null }
+        ) : null}
       </div>
-      <Button variant="contained" className="float-right" size="small" onClick={onLeave}>Leave</Button>
+      <Box className="float-right flex grow-0 flex-row justify-items-end w-100">
+        <QuestionModal />
+        <div className="mr-1 ml-1" />
+        <Button
+          variant="contained"
+          className="float-right"
+          size="small"
+          onClick={onLeave}
+        >
+          Leave
+        </Button>
+      </Box>
     </CardContent>
   </Card>
 );
