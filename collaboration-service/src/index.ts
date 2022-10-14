@@ -1,8 +1,9 @@
 import dotenv from 'dotenv';
 import SocketServer from './Server';
+import redisClient from './redis';
 
 dotenv.config();
 const server = new SocketServer();
-server.start();
+redisClient.connect().then(() => server.start());
 
 export default server;

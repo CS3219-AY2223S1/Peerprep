@@ -26,6 +26,12 @@ export enum SocketEvent {
   LEAVE_QUEUE = 'leave_queue',
 }
 
+export enum CollabSocketEvent {
+  INIT = 'init',
+  CODE_UPDATE = 'code_update',
+  DISCONNECT_ALL = 'disconnect_all',
+}
+
 export enum CommunicationSocket {
   JOIN_ROOM = 'joinRoom',
   IN_ROOM = 'inRoom',

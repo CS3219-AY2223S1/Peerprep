@@ -5,6 +5,9 @@ export interface User {
 
 export enum Event {
   CONNECTION = 'connection',
+  INIT = 'init',
+  CODE_UPDATE = 'code_update',
+  DISCONNECT_ALL = 'disconnect_all',
 }
 
 export interface UserCred {
