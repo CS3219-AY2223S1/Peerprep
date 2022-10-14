@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import axios from 'axios';
 import { io } from 'socket.io-client';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import Footer from '../components/room/Footer';
 import NavBar from '../components/common/NavBar';
 import { useSocketContext } from '../contexts/SocketContext';
@@ -14,6 +14,7 @@ import { CollabSocketEvent } from '../constants';
 export default () => {
   const { partner, dispatch, roomUuid } = useSocketContext();
   const { user, cookie } = useAuthContext();
+  const { id } = useParams();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -24,6 +25,13 @@ export default () => {
     'http://localhost:9001',
     { path: '/collaborate', auth: { token: cookie.userCred }, query: { roomUuid } },
   );
+
+  useEffect(() => {
+    collaborationSocket.on(CollabSocketEvent.DISCONNECT_ALL, () => {
+      dispatch({ type: 'DISCONNECTED' });
+      navigate('/match');
+    });
+  }, []);
 
   const fetchData = async () => {
     const accessToken = cookie.userCred;
@@ -41,6 +49,11 @@ export default () => {
           difficulty: res.data.difficulty,
         },
       });
+      if (roomUuid !== id) {
+        navigate('/match');
+      }
+    } else {
+      navigate('/match');
     }
   };
 
@@ -55,7 +68,9 @@ export default () => {
     });
     res.then(() => {
       collaborationSocket.emit(CollabSocketEvent.DISCONNECT_ALL);
+      dispatch({ type: 'DISCONNECTED' });
       navigate('/match');
+      window.location.reload();
     });
   };
 
@@ -66,7 +81,7 @@ export default () => {
         <div className="relative overflow-auto h-full w-full">
           <Editor socket={collaborationSocket} />
         </div>
-        <div className="absolute z-1 bottom-16 right-2 w-1/5">
+        <div className="absolute z-1 bottom-20 right-2 w-1/5">
           <Chat />
         </div>
       </div>

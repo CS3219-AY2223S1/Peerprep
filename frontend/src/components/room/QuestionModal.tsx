@@ -1,19 +1,21 @@
-import React, { useEffect, useState } from "react";
-import { Box, Button, Modal, Typography } from "@mui/material";
-import { CopyToClipboard } from "react-copy-to-clipboard";
-import axios from "axios";
-import { URL_QUESTION_GET_RANDOM } from "../../configs";
-import { STATUS_CODE_SUCCESS } from "../../constants";
-import { useSocketContext } from "../../contexts/SocketContext";
+import React, { useEffect, useState } from 'react';
+import {
+  Box, Button, Modal, Typography,
+} from '@mui/material';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
+import axios from 'axios';
+import { URL_QUESTION_GET_RANDOM } from '../../configs';
+import { STATUS_CODE_SUCCESS } from '../../constants';
+import { useSocketContext } from '../../contexts/SocketContext';
 
 const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
   width: 400,
-  bgcolor: "background.paper",
-  border: "2px solid #000",
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
   boxShadow: 24,
   p: 4,
 };
@@ -21,10 +23,10 @@ const style = {
 const QuestionModal = () => {
   const { difficulty } = useSocketContext();
   const [open, setOpen] = useState(false);
-  const [printBody, setPrintBody] = useState("Uh oh... No questions yet");
-  const [printTitle, setPrintTitle] = useState("No title");
-  const [title, setTitle] = useState("");
-  const [body, setBody] = useState("");
+  const [printBody, setPrintBody] = useState('Uh oh... No questions yet');
+  const [printTitle, setPrintTitle] = useState('No title');
+  const [title, setTitle] = useState('');
+  const [body, setBody] = useState('');
   const [render, setRender] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -49,7 +51,7 @@ const QuestionModal = () => {
   const getQuestion = async () => {
     const res = await axios
       .get(URL_QUESTION_GET_RANDOM, {
-        headers: { difficulty: difficulty },
+        headers: { difficulty },
       })
       .catch((err) => {
         console.log(err);

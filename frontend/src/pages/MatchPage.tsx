@@ -22,16 +22,12 @@ export default () => {
   const [isConnectedElsewhere, setIsConnectedElsewhere] = useState<boolean>(false);
   const [isInQueue, setisInQueue] = useState<boolean>(false);
   const [timer, setTimer] = useState<number>(0);
-  const { roomUuid } = useSocketContext();
   const navigate = useNavigate();
 
   useEffect(() => {
     // Example
     fetchData();
-    if (roomUuid) {
-      navigate(`/room/${roomUuid}`);
-    }
-  }, []);
+  }, [timer]);
 
   const fetchData = async () => {
     const accessToken = cookie.userCred;
@@ -49,7 +45,7 @@ export default () => {
           difficulty: res.data.difficulty,
         },
       });
-      navigate(`/room/${roomUuid}`);
+      navigate(`/room/${res.data.uuid}`);
     }
   };
 
