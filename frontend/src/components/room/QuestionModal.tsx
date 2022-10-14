@@ -4,6 +4,7 @@ import { CopyToClipboard } from "react-copy-to-clipboard";
 import axios from "axios";
 import { URL_QUESTION_GET_RANDOM } from "../../configs";
 import { STATUS_CODE_SUCCESS } from "../../constants";
+import { useSocketContext } from "../../contexts/SocketContext";
 
 const style = {
   position: "absolute",
@@ -17,9 +18,8 @@ const style = {
   p: 4,
 };
 
-const dummyDifficulty = "Easy peasy";
-
 const QuestionModal = () => {
+  const { difficulty } = useSocketContext();
   const [open, setOpen] = useState(false);
   const [printBody, setPrintBody] = useState("Uh oh... No questions yet");
   const [printTitle, setPrintTitle] = useState("No title");
@@ -49,7 +49,7 @@ const QuestionModal = () => {
   const getQuestion = async () => {
     const res = await axios
       .get(URL_QUESTION_GET_RANDOM, {
-        headers: { difficulty: dummyDifficulty },
+        headers: { difficulty: difficulty },
       })
       .catch((err) => {
         console.log(err);
