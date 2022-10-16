@@ -23,7 +23,7 @@ const Chat = () => {
   }, []);
 
   useEffect(() => {
-    if (roomUuid) {
+    if (roomUuid && stream) {
       socket.emit(CommunicationSocket.JOIN_ROOM, { roomUuid, user });
     }
     socket.on(CommunicationSocket.IN_ROOM, (data) => {
@@ -92,13 +92,10 @@ const Chat = () => {
   };
 
   const handleDisconnect = () => {
-    leaveCall();
-    window.location.reload();
-  };
-
-  const leaveCall = () => {
     if (connectionRef.current) connectionRef.current.destroy();
-    if (userVideo.current.srcObject) userVideo.current.srcObject = null;
+    if (userVideo.current?.srcObject) userVideo.current.srcObject = null;
+    socket.off();
+    window.location.reload();
   };
 
   return (

@@ -32,8 +32,12 @@ interface State {
 const socketReducer = (state: State, action: Action) => {
   switch (action.type) {
     case 'MATCHED':
-      return { partner: action.payload.partner, roomUuid: action.payload.roomUuid, difficulty: action.payload.difficulty };
-    case 'DISCONNECT':
+      return {
+        partner: action.payload.partner,
+        roomUuid: action.payload.roomUuid,
+        difficulty: action.payload.difficulty,
+      };
+    case 'DISCONNECTED':
       return { partner: null, roomUuid: null, difficulty: null };
     default:
       return state;

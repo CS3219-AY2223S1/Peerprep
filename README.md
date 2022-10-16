@@ -13,15 +13,33 @@ skeleton.
 * MongoDB Compass (Optional)
 
 ## User Service
-1. Copy `.env.example` file as `.env`.  
-~~2. Create a Cloud DB URL using Mongo Atlas.~~  
-~~3. Enter the DB URL created as `DB_CLOUD_URI` in `.env` file.~~  
-4. Install npm packages using `npm i`.
-5. Run User Service using `npm run dev`.
+1. Copy `.env.example` file as `.env`.
+2. Update the relevant enivronment variables
+~~3. Create a Cloud DB URL using Mongo Atlas.~~  
+~~4. Enter the DB URL created as `DB_CLOUD_URI` in `.env` file.~~  
+5. Install npm packages using `npm i`.
+6. Run User Service using `npm run dev`.
 
 ## Matching Service
-1. Install npm packages using `npm i`.
-2. Run User Service using `npm run dev`.
+1. Copy `.env.example` file as `.env`.
+2. Update the relevant enivronment variables
+3. Install npm packages using `npm i`.
+4. Run `docker run -d -e POSTGRES_PASSWORD=root -p 5455:5432 postgres`
+4. Run `npx prisma migrate dev` to update data in db or `npx prisma migrate reset` to reset db
+4. Run User Service using `npm run dev`.
+
+## Communication Service
+1. Copy `.env.example` file as `.env`.
+2. Update the relevant enivronment variables
+3. Install npm packages using `npm i`.
+4. Run User Service using `npm run dev`.
+
+## Collaboration Service
+1. Copy `.env.example` file as `.env`.
+2. Update the relevant enivronment variables
+3. Install npm packages using `npm i`.
+4. Run `docker compose up` to start redis
+4. Run User Service using `npm run dev`.
 
 ## Frontend
 1. Install npm packages using `npm i`.
