@@ -5,8 +5,6 @@ import { useAuthContext } from '../../contexts/AuthContext';
 import { CommunicationSocket } from '../../constants';
 import { useSocketContext } from '../../contexts/SocketContext';
 
-const socket = io('http://localhost:8002');
-
 const Chat = () => {
   const [stream, setStream] = useState<MediaStream>();
   const myVideo = useRef<HTMLVideoElement>();
@@ -14,6 +12,9 @@ const Chat = () => {
   const connectionRef = useRef<any>();
   const { roomUuid } = useSocketContext();
   const { user } = useAuthContext();
+  const { cookie } = useAuthContext();
+
+  const socket = io('http://localhost:8002', { path: '/room', auth: { token: cookie.userCred } });
 
   useEffect(() => {
     navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then((curStream) => {

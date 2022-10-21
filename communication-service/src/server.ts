@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import http, { Server as httpServer } from 'http';
 import { Server } from 'socket.io';
+import { authMiddleware } from './authMiddleWare';
 
 export default class SocketServer {
   private httpServer: httpServer;
@@ -54,8 +55,8 @@ export default class SocketServer {
 
       socket.on('answerCall', (data) => socket.to(data.to).emit('callAccepted', data.signal));
     });
-    // TODO
-    // authMiddleware(socketIoServer);
+
+    authMiddleware(socketIoServer);
     return { httpServer, socketIoServer };
   }
 
