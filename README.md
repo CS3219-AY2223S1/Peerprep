@@ -41,6 +41,12 @@ skeleton.
 4. Run `docker compose up` to start redis
 4. Run User Service using `npm run dev`.
 
+## Question service
+1. Copy `.env.example` file as `.env`.
+2. Update the relevant enivronment variables
+3. Install npm packages using `npm i`.
+4. Run User Service using `npm run dev`.
+
 ## Frontend
 1. Install npm packages using `npm i`.
 2. Run Frontend using `npm start`.

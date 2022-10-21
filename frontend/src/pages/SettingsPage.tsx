@@ -67,7 +67,7 @@ export default () => {
   };
 
   const handleChangePassword = async () => {
-    if (deletePassword === '' || newPassword1 === '' || newPassword2 === '') {
+    if (changePWPassword === '' || newPassword1 === '' || newPassword2 === '') {
       handleChangePWAlert(true, 'Fields cannot be empty!');
       return;
     }
@@ -85,7 +85,7 @@ export default () => {
     }
     const accessToken = cookie.userCred;
     const res = await axios
-      .post(URL_USER_CHANGE_PW_SVC, { password: deletePassword, newPassword: newPassword1, accessToken })
+      .post(URL_USER_CHANGE_PW_SVC, { password: changePWPassword, newPassword: newPassword1, accessToken })
       .catch((err) => {
         if (err.response.status === STATUS_CODE_FORBIDDEN) {
           handleChangePWAlert(true, 'Invalid Password!');
