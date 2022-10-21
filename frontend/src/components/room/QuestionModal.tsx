@@ -51,7 +51,7 @@ const QuestionModal = () => {
   const getQuestion = async () => {
     const res = await axios
       .get(URL_QUESTION_GET_RANDOM, {
-        headers: { difficulty },
+        headers: { difficulty: difficulty }, //eslint-disable-line
       })
       .catch((err) => {
         console.log(err);
