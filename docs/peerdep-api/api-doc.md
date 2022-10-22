@@ -57,11 +57,11 @@ URL: http://localhost:8004/api/session/add
 
 ```js        
 {
-    "username" : "test",
-    "partnername" : "testtest",
+    "userTwoName" : "testtest",
     "completedOn": "1852-01-15T11:25",
     "duration":"1h10m",
     "difficulty": "hard",
+    "roomUuid": "123",
     "code": "print('help')"
 }
 ```
@@ -295,4 +295,4 @@ URL: http://localhost:8000/api/user/login
 
 ---
 [Back to top](#peerdep-api)
-> Made with &#9829; by [thedevsaddam](https://github.com/thedevsaddam) | Generated at: 2022-10-22 21:47:36 by [docgen](https://github.com/thedevsaddam/docgen)
+> Made with &#9829; by [thedevsaddam](https://github.com/thedevsaddam) | Generated at: 2022-10-23 02:05:46 by [docgen](https://github.com/thedevsaddam/docgen)

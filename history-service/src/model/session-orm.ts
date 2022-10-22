@@ -15,11 +15,23 @@ export async function ormCreateSession(session: ISessionModel) {
 export async function ormGetSessionsByUser(name: String) {
   try {
     const options = {
-      username: name,
+      $or: [{ userOneName: name }, { userTwoName: name }],
     };
     return await getSession(options);
   } catch (err) {
     console.log('ERROR: Could not get sessions by username');
+    return { err };
+  }
+}
+
+export async function ormGetSessionByRoom(uuid: String) {
+  try {
+    const options = {
+      roomUuid: uuid,
+    };
+    return await getSession(options);
+  } catch (err) {
+    console.log('ERROR: Could not get sessions by room uuid');
     return { err };
   }
 }

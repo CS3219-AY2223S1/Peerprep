@@ -8,7 +8,9 @@ import { AuthMiddleware } from '../middlewares/authMiddleware';
 import {
   ormCreateSession as _createSession,
   ormGetSessionsByUser as _getSession,
+  ormGetSessionByRoom as _checkDuplicateSess
 } from '../model/session-orm';
+import { User } from '../constants';
 
 @Controller('/session')
 export default class SessionCtrl {
@@ -17,12 +19,22 @@ export default class SessionCtrl {
   @Returns(401, Unauthorized).Description("Unauthorized")
   async createSession(req: Request, res: Response) {
     try {
+      const token = req.headers.authorization || req.headers.Authorization as unknown as string;
+      const user = jwt_decode(token) as User;
       const {
-        username, partnername, completedOn, duration, difficulty,
+        userTwoName, completedOn, duration, roomUuid, difficulty,
       } = req.body;
-      if (username && partnername && completedOn && duration && difficulty) {
-        const resp = await _createSession(req.body);
+      req.body.userOneName = user.username;
 
+      if (userTwoName && completedOn && duration && roomUuid && difficulty) {
+        const duplicateSessions = await _checkDuplicateSess(roomUuid) as Array<any>;
+        if (duplicateSessions.length > 0) {
+          return res
+            .status(400)
+            .json({ message: 'Session exists' });
+        }
+
+        const resp = await _createSession(req.body);
         if (!resp) {
           return res
             .status(400)
@@ -47,18 +59,17 @@ export default class SessionCtrl {
   @Returns(401, Unauthorized).Description("Unauthorized")
   async getUserSessions(req: Request, res: Response) {
     try {
-            type User = { username: String, id: number };
-            const token = req.headers.authorization || req.headers.Authorization as unknown as string;
-            const user = jwt_decode(token) as User;
-            if (!user) {
-              return res
-                .status(400)
-                .json({ message: 'Could not create retrieve any session' });
-            }
-            const result = await _getSession(user.username);
-            return res
-              .status(200)
-              .json(result);
+      const token = req.headers.authorization || req.headers.Authorization as unknown as string;
+      const user = jwt_decode(token) as User;
+      if (!user) {
+        return res
+          .status(400)
+          .json({ message: 'Could not create retrieve any session' });
+      }
+      const result = await _getSession(user.username);
+      return res
+        .status(200)
+        .json(result);
     } catch (err) {
       return res
         .status(500)

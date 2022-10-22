@@ -1,21 +1,22 @@
 import mongoose from 'mongoose';
 
 export interface ISessionModel {
-  username: String;
-  partnername: String;
+  userOneName: String;
+  userTwoName: String;
   completedOn: Date;
   duration: String;
+  roomUuid: String;
   difficulty: String;
   code: String;
 }
 
 const { Schema } = mongoose;
 const SessionModelSchema = new Schema<ISessionModel>({
-  username: {
+  userOneName: {
     type: String,
     required: true,
   },
-  partnername: {
+  userTwoName: {
     type: String,
     required: true,
   },
@@ -24,6 +25,10 @@ const SessionModelSchema = new Schema<ISessionModel>({
     required: true,
   },
   duration: {
+    type: String,
+    required: true,
+  },
+  roomUuid: {
     type: String,
     required: true,
   },
