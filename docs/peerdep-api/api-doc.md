@@ -1,124 +1,103 @@
+
 # peerdep-api
 
-<!--- If we have only one group/collection, then no need for the "ungrouped" heading -->
 
-## Endpoints
 
-- [user-service](#user-service)
-  1. [Create user - SUCCESS](#1-create-user---success)
-  1. [Create user - USER_EXISTS (run after success)](#2-create-user---user_exists-run-after-success)
-  1. [Create user - PASSWORD_TOO_SHORT](#3-create-user---password_too_short)
-  1. [Login user - SUCCESS](#4-login-user---success)
-  1. [Login user - INVALID_USER/PW](#5-login-user---invalid_userpw)
-- [Question Service](#question-service)
-  1. [Add question](#1-add-question)
-  1. [Delete question](#2-delete-question)
-  1. [Get random question](#3-get-random-question)
+## Indices
 
----
+* [History Service](#history-service)
 
-## user-service
+  * [Create session](#1-create-session)
+  * [Get sessions](#2-get-sessions)
 
-### 1. Create user - SUCCESS
+* [Question Service](#question-service)
 
-**_Endpoint:_**
+  * [Add question](#1-add-question)
+  * [Delete question](#2-delete-question)
+  * [Get random question](#3-get-random-question)
+
+* [User Service](#user-service)
+
+  * [Create user - PASSWORD_TOO_SHORT](#1-create-user---password_too_short)
+  * [Create user - SUCCESS](#2-create-user---success)
+  * [Create user - USER_EXISTS (run after success)](#3-create-user---user_exists-(run-after-success))
+  * [Login user - INVALID_USER/PW](#4-login-user---invalid_userpw)
+  * [Login user - SUCCESS](#5-login-user---success)
+
+
+--------
+
+
+## History Service
+
+
+
+### 1. Create session
+
+
+
+***Endpoint:***
 
 ```bash
 Method: POST
 Type: RAW
-URL: http://localhost:8000/api/user/signup
+URL: http://localhost:8004/api/session/add
 ```
 
-**_Body:_**
 
-```js
+***Headers:***
+
+| Key | Value | Description |
+| --- | ------|-------------|
+| Authorization | eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJpZCI6MTIsImlhdCI6MTY2NjQ0MTc3MywiZXhwIjoxNjY2NTI4MTczfQ.nCnObkCA0SL-C4XTapoIoQiRp22c8TpuTF9j9pFWT0w |  |
+
+
+
+***Body:***
+
+```js        
 {
     "username" : "test",
-    "password" : "testtest"
+    "partnername" : "testtest",
+    "completedOn": "1852-01-15T11:25",
+    "duration":"1h10m",
+    "difficulty": "hard",
+    "code": "print('help')"
 }
 ```
 
-### 2. Create user - USER_EXISTS (run after success)
 
-**_Endpoint:_**
+
+### 2. Get sessions
+
+
+
+***Endpoint:***
 
 ```bash
-Method: POST
-Type: RAW
-URL: http://localhost:8000/api/user/signup
+Method: GET
+Type: 
+URL: http://localhost:8004/api/session/userSession
 ```
 
-**_Body:_**
 
-```js
-{
-    "username" : "test",
-    "password" : "testtest"
-}
-```
+***Headers:***
 
-### 3. Create user - PASSWORD_TOO_SHORT
+| Key | Value | Description |
+| --- | ------|-------------|
+| Authorization | eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJpZCI6MTIsImlhdCI6MTY2NjQ0MTc3MywiZXhwIjoxNjY2NTI4MTczfQ.nCnObkCA0SL-C4XTapoIoQiRp22c8TpuTF9j9pFWT0w |  |
 
-**_Endpoint:_**
 
-```bash
-Method: POST
-Type: RAW
-URL: http://localhost:8000/api/user/signup
-```
-
-**_Body:_**
-
-```js
-{
-    "username" : "test2",
-    "password" : "test"
-}
-```
-
-### 4. Login user - SUCCESS
-
-**_Endpoint:_**
-
-```bash
-Method: POST
-Type: RAW
-URL: http://localhost:8000/api/user/login
-```
-
-**_Body:_**
-
-```js
-{
-    "username" : "test",
-    "password" : "testtest"
-}
-```
-
-### 5. Login user - INVALID_USER/PW
-
-**_Endpoint:_**
-
-```bash
-Method: POST
-Type: RAW
-URL: http://localhost:8000/api/user/login
-```
-
-**_Body:_**
-
-```js
-{
-    "username" : "invalidUser",
-    "password" : "invalidPW"
-}
-```
 
 ## Question Service
 
+
+
 ### 1. Add question
 
-**_Endpoint:_**
+
+
+***Endpoint:***
 
 ```bash
 Method: POST
@@ -126,19 +105,26 @@ Type: URLENCODED
 URL: http://localhost:8003/questions/test/add
 ```
 
-**_Body:_**
 
-| Key        | Value       | Description |
-| ---------- | ----------- | ----------- |
-| title      | Blake       |             |
-| content    | Add x \* 10 |             |
-| difficulty | Hard        |             |
-| input      | 1, 2        |             |
-| output     | 3           |             |
+
+***Body:***
+
+
+| Key | Value | Description |
+| --- | ------|-------------|
+| title | Blake |  |
+| content | Add x * 10 |  |
+| difficulty | Hard |  |
+| input | 1, 2 |  |
+| output | 3 |  |
+
+
 
 ### 2. Delete question
 
-**_Endpoint:_**
+
+
+***Endpoint:***
 
 ```bash
 Method: POST
@@ -146,30 +132,167 @@ Type: URLENCODED
 URL: http://localhost:8003/questions/test/delete
 ```
 
-**_Body:_**
 
-| Key   | Value | Description |
-| ----- | ----- | ----------- |
-| title | Ten   |             |
+
+***Body:***
+
+
+| Key | Value | Description |
+| --- | ------|-------------|
+| title | Ten |  |
+
+
 
 ### 3. Get random question
 
-**_Endpoint:_**
+
+
+***Endpoint:***
 
 ```bash
 Method: GET
-Type:
+Type: 
 URL: http://localhost:8003/questions/test/getOne
 ```
 
-**_Headers:_**
 
-| Key        | Value      | Description |
-| ---------- | ---------- | ----------- |
-| difficulty | Easy peasy |             |
+***Headers:***
+
+| Key | Value | Description |
+| --- | ------|-------------|
+| difficulty | Easy peasy |  |
+
+
+
+## User Service
+
+
+
+### 1. Create user - PASSWORD_TOO_SHORT
+
+
+
+***Endpoint:***
+
+```bash
+Method: POST
+Type: RAW
+URL: http://localhost:8000/api/user/signup
+```
+
+
+
+***Body:***
+
+```js        
+{
+    "username" : "test2",
+    "password" : "test"
+}
+```
+
+
+
+### 2. Create user - SUCCESS
+
+
+
+***Endpoint:***
+
+```bash
+Method: POST
+Type: RAW
+URL: http://localhost:8000/api/user/signup
+```
+
+
+
+***Body:***
+
+```js        
+{
+    "username" : "test",
+    "password" : "testtest"
+}
+```
+
+
+
+### 3. Create user - USER_EXISTS (run after success)
+
+
+
+***Endpoint:***
+
+```bash
+Method: POST
+Type: RAW
+URL: http://localhost:8000/api/user/signup
+```
+
+
+
+***Body:***
+
+```js        
+{
+    "username" : "test",
+    "password" : "testtest"
+}
+```
+
+
+
+### 4. Login user - INVALID_USER/PW
+
+
+
+***Endpoint:***
+
+```bash
+Method: POST
+Type: RAW
+URL: http://localhost:8000/api/user/login
+```
+
+
+
+***Body:***
+
+```js        
+{
+    "username" : "invalidUser",
+    "password" : "invalidPW"
+}
+```
+
+
+
+### 5. Login user - SUCCESS
+
+
+
+***Endpoint:***
+
+```bash
+Method: POST
+Type: RAW
+URL: http://localhost:8000/api/user/login
+```
+
+
+
+***Body:***
+
+```js        
+{
+    "username" : "test",
+    "password" : "testtest"
+}
+```
+
+
 
 ---
-
 [Back to top](#peerdep-api)
-
-> Generated at 2022-10-07 16:11:31 by [docgen](https://github.com/thedevsaddam/docgen)
+> Made with &#9829; by [thedevsaddam](https://github.com/thedevsaddam) | Generated at: 2022-10-22 21:47:36 by [docgen](https://github.com/thedevsaddam/docgen)

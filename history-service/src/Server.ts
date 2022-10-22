@@ -10,7 +10,7 @@ import SessionCtrl from './controllers/SessionCtrl';
   acceptMimes: ['application/json'],
   port: process.env.PORT || 8004,
   mount: { '/api': [SessionCtrl] },
-})
+  })
 export default class Server {
   @Inject()
     app!: PlatformApplication;

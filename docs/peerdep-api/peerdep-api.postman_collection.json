@@ -1,13 +1,13 @@
 {
 	"info": {
-		"_postman_id": "6e47c1c9-e44b-49fe-bb61-d91f9c42d239",
+		"_postman_id": "fa3ca986-dac2-4a70-9add-94ebe3558620",
 		"name": "peerdep-api",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "15891105"
+		"_exporter_id": "15764301"
 	},
 	"item": [
 		{
-			"name": "user-service",
+			"name": "User Service",
 			"item": [
 				{
 					"name": "Create user - SUCCESS",
@@ -268,6 +268,74 @@
 								"questions",
 								"test",
 								"getOne"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "History Service",
+			"item": [
+				{
+					"name": "Create session",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJpZCI6MTIsImlhdCI6MTY2NjQ0MTc3MywiZXhwIjoxNjY2NTI4MTczfQ.nCnObkCA0SL-C4XTapoIoQiRp22c8TpuTF9j9pFWT0w",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\" : \"test\",\r\n    \"partnername\" : \"testtest\",\r\n    \"completedOn\": \"1852-01-15T11:25\",\r\n    \"duration\":\"1h10m\",\r\n    \"difficulty\": \"hard\",\r\n    \"code\": \"print('help')\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8004/api/session/add",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8004",
+							"path": [
+								"api",
+								"session",
+								"add"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get sessions",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJpZCI6MTIsImlhdCI6MTY2NjQ0MTc3MywiZXhwIjoxNjY2NTI4MTczfQ.nCnObkCA0SL-C4XTapoIoQiRp22c8TpuTF9j9pFWT0w",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8004/api/session/userSession",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8004",
+							"path": [
+								"api",
+								"session",
+								"userSession"
 							]
 						}
 					},
