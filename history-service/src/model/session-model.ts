@@ -30,6 +30,7 @@ const SessionModelSchema = new Schema<ISessionModel>({
   },
   roomUuid: {
     type: String,
+    unique: true,
     required: true,
   },
   difficulty: {
