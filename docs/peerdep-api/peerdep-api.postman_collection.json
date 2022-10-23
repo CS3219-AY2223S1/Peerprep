@@ -291,7 +291,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"username\" : \"test\",\r\n    \"partnername\" : \"testtest\",\r\n    \"completedOn\": \"1852-01-15T11:25\",\r\n    \"duration\":\"1h10m\",\r\n    \"difficulty\": \"hard\",\r\n    \"code\": \"print('help')\"\r\n}",
+							"raw": "{\r\n    \"userTwoName\" : \"testtest\",\r\n    \"completedOn\": \"1852-01-15T11:25\",\r\n    \"duration\":\"1h10m\",\r\n    \"difficulty\": \"hard\",\r\n    \"roomUuid\": \"123\",\r\n    \"code\": \"print('help')\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
