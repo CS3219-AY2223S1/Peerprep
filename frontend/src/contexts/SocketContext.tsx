@@ -27,6 +27,7 @@ interface State {
   partner: String;
   roomUuid: String;
   difficulty: String;
+  createdAt: Date;
 }
 
 const socketReducer = (state: State, action: Action) => {
@@ -36,6 +37,7 @@ const socketReducer = (state: State, action: Action) => {
         partner: action.payload.partner,
         roomUuid: action.payload.roomUuid,
         difficulty: action.payload.difficulty,
+        createdAt: action.payload.createdAt,
       };
     case 'DISCONNECTED':
       return { partner: null, roomUuid: null, difficulty: null };
@@ -47,7 +49,7 @@ const socketReducer = (state: State, action: Action) => {
 export const SocketContextProvider: React.FC<ProviderProps> = ({ children }) => {
   const { cookie } = useAuthContext();
   const [state, dispatch] = useReducer(socketReducer, {
-    partner: null, roomUuid: null, difficulty: null,
+    partner: null, roomUuid: null, difficulty: null, createdAt: null,
   });
   // load socket if there is cookie
   const socket = useMemo<Socket>(() => {
