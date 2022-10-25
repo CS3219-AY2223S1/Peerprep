@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { io } from 'socket.io-client';
+import { io, Socket } from 'socket.io-client';
 import { useNavigate, useParams } from 'react-router-dom';
 import Footer from '../components/room/Footer';
 import NavBar from '../components/common/NavBar';
@@ -16,22 +16,20 @@ export default () => {
   const { user, cookie } = useAuthContext();
   const { id } = useParams();
   const navigate = useNavigate();
+  const [collaborationSocket, setCollaborationSocket] = useState<Socket>();
 
   useEffect(() => {
     fetchData();
   }, []);
 
-  const collaborationSocket = io(
-    'http://localhost:9001',
-    { path: '/collaborate', auth: { token: cookie.userCred }, query: { roomUuid } },
-  );
-
   useEffect(() => {
-    collaborationSocket.on(CollabSocketEvent.DISCONNECT_ALL, () => {
-      dispatch({ type: 'DISCONNECTED' });
-      navigate('/match');
-    });
-  }, []);
+    if (collaborationSocket) {
+      collaborationSocket.on(CollabSocketEvent.DISCONNECT_ALL, () => {
+        dispatch({ type: 'DISCONNECTED' });
+        navigate('/match');
+      });
+    }
+  }, [collaborationSocket]);
 
   const fetchData = async () => {
     const accessToken = cookie.userCred;
@@ -47,8 +45,22 @@ export default () => {
           partner: res.data.partnerName,
           roomUuid: res.data.uuid,
           difficulty: res.data.difficulty,
+          createdAt: Date.parse(res.data.createdAt),
         },
       });
+      setCollaborationSocket(io(
+        'http://localhost:9001',
+        {
+          path: '/collaborate',
+          auth: { token: cookie.userCred },
+          query: {
+            partner: res.data.partnerName,
+            roomUuid: res.data.uuid,
+            difficulty: res.data.difficulty,
+            createdAt: Date.parse(res.data.createdAt),
+          },
+        },
+      ));
       if (roomUuid !== id) {
         navigate('/match');
       }
@@ -79,7 +91,7 @@ export default () => {
       <NavBar />
       <div className="h-full flex">
         <div className="relative overflow-auto h-full w-full">
-          <Editor socket={collaborationSocket} />
+          {!!collaborationSocket && <Editor socket={collaborationSocket} />}
         </div>
         <div className="absolute z-1 bottom-20 right-2 w-1/5">
           <Chat />

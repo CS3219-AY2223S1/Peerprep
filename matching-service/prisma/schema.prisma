@@ -18,4 +18,5 @@ model Room {
   userTwoId     Int
   userTwoName   String
   closed        Boolean  @default(false)
+  closedAt      DateTime?
 }

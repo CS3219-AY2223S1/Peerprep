@@ -6,9 +6,11 @@ import { UserCred } from '../constants';
 export const authMiddleware = (ioServer: Server) => {
   ioServer.use((socket, next) => {
     const { token } = socket.handshake.auth;
-    const roomUuid = socket.handshake.query.roomUuid as unknown as string;
-    if (!roomUuid) {
-      next(new Error('Room uuid is missing!'));
+    const {
+      roomUuid, partner, difficulty, createdAt,
+    } = socket.handshake.query;
+    if (!(!!roomUuid && !!partner && !!difficulty && !!createdAt)) {
+      next(new Error('Information is missing!'));
       return;
     }
     try {

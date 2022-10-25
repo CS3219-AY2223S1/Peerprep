@@ -8,7 +8,7 @@ import { AuthMiddleware } from '../middlewares/authMiddleware';
 import {
   ormCreateSession as _createSession,
   ormGetSessionsByUser as _getSession,
-  ormGetSessionByRoom as _checkDuplicateSess
+  ormGetSessionByRoom as _checkDuplicateSess,
 } from '../model/session-orm';
 import { User } from '../constants';
 
@@ -22,11 +22,11 @@ export default class SessionCtrl {
       const token = req.headers.authorization || req.headers.Authorization as unknown as string;
       const user = jwt_decode(token) as User;
       const {
-        userTwoName, completedOn, duration, roomUuid, difficulty,
+        userTwoName, completedOn, duration, roomUuid, difficulty, code,
       } = req.body;
       req.body.userOneName = user.username;
 
-      if (userTwoName && completedOn && duration && roomUuid && difficulty) {
+      if (userTwoName && completedOn && duration && roomUuid && difficulty && code) {
         const duplicateSessions = await _checkDuplicateSess(roomUuid) as Array<any>;
         if (duplicateSessions.length > 0) {
           return res

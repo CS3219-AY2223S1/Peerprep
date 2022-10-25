@@ -16,3 +16,6 @@ export interface UserCred {
   iat: number;
   exp: number;
 }
+const URI_HISTORY_SVC = process.env.URI_HISTORY_SVC || 'http://localhost:8004';
+
+export const URL_CREATE_SESSION = `${URI_HISTORY_SVC}/api/session/add`;

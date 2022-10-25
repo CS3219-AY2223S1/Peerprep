@@ -36,7 +36,7 @@ export class RoomService {
   }
 
   async getActiveRoomInfo(userId: number):
-  Promise<{ partnerName: string | undefined, uuid: string, difficulty: string } | null> {
+  Promise<{ partnerName: string | undefined, uuid: string, difficulty: string, createdAt: Date } | null> {
     const room = await prisma.room.findFirst({
       where: {
         OR: [
@@ -49,7 +49,12 @@ export class RoomService {
       },
     });
     const partnerName = userId === room?.userOneId ? room?.userTwoName : room?.userOneName;
-    return (!!room && !room?.closed) ? { difficulty: room.difficulty, partnerName, uuid: room.uuid }
+    return (!!room && !room?.closed) ? {
+      difficulty: room.difficulty,
+      partnerName,
+      uuid: room.uuid,
+      createdAt: room.createdAt,
+    }
       : null;
   }
 
@@ -60,6 +65,7 @@ export class RoomService {
           { userOneId: userId },
           { userTwoId: userId },
         ],
+        closed: false,
       },
       orderBy: {
         id: 'desc',
@@ -72,6 +78,7 @@ export class RoomService {
         },
         data: {
           closed: true,
+          closedAt: new Date(),
         },
       });
     }
