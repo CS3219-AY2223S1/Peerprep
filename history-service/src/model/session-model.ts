@@ -39,6 +39,7 @@ const SessionModelSchema = new Schema<ISessionModel>({
   },
   code: {
     type: String,
+    require: true,
   },
 });
 
