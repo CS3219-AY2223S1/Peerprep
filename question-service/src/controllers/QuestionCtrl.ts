@@ -7,12 +7,17 @@ import {
   ormDeleteQuestion as _deleteQuestion,
   ormGetRandomQuestion as _getRandomQuestion,
 } from "../model/question-orm";
+import { verifyUser } from "./AuthMiddleWare";
 
 @Controller("/test")
 export default class QuestionCtrl {
   @Get("/justin")
   async testEndpoint(req: Request, res: Response) {
-    return res.status(200).json({message: "Today I realised I damn handsome, why am I so handsome?"});
+    return res
+      .status(200)
+      .json({
+        message: "Today I realised I damn handsome, why am I so handsome?",
+      });
   }
 
   @Post("/add")
@@ -29,7 +34,13 @@ export default class QuestionCtrl {
         }
 
         // create a new user
-        const resp = await _createQuestion({ title, difficulty, content, input, output  });
+        const resp = await _createQuestion({
+          title,
+          difficulty,
+          content,
+          input,
+          output,
+        });
         console.log(resp);
         if (!resp) {
           return res
@@ -41,9 +52,7 @@ export default class QuestionCtrl {
           .status(200)
           .json({ message: `Created new question ${title} successfully!` });
       }
-      return res
-        .status(401)
-        .json({ message: "Some parameters are missing!" });
+      return res.status(401).json({ message: "Some parameters are missing!" });
     } catch (err) {
       return res
         .status(500)
@@ -54,33 +63,43 @@ export default class QuestionCtrl {
   @Post("/delete")
   async deleteQuestion(req: Request, res: Response) {
     const { title } = req.body;
-    
-    if (!(title)) {
-      return res
-        .status(401)
-        .json({ message: "Question title is missing!" });
+
+    if (!title) {
+      return res.status(401).json({ message: "Question title is missing!" });
     }
     const success = await _deleteQuestion(title);
     if (success) {
-      return res.status(200).json({ message: "Question successfully deleted!" });
+      return res
+        .status(200)
+        .json({ message: "Question successfully deleted!" });
     } else {
-      return res.status(500).json({ message: "Question unable to be deleted!" });
+      return res
+        .status(500)
+        .json({ message: "Question unable to be deleted!" });
     }
   }
 
   @Get("/getOne")
   async getQuestions(req: Request, res: Response) {
-    const difficulty =  req.headers.difficulty as string;
-    if (!(difficulty)) {
+    const difficulty = req.headers.difficulty as string;
+    const token = req.headers.authorization;
+    if (!token) {
+      return res.status(401).json({ message: "Access token is missing! " });
+    }
+    const success = await verifyUser(token);
+    if (!success) {
+      return res.status(403).json({ message: "Invalid access token! " });
+    }
+    if (!difficulty) {
       return res
         .status(401)
-        .json({ message: "Question difficulty is missing! "});
+        .json({ message: "Question difficulty is missing! " });
     }
     try {
       const result = await _getRandomQuestion(difficulty);
       console.log("results are:", result);
       return res.status(200).json({ message: result });
-    } catch(err) {
+    } catch (err) {
       console.log("This ain't it man");
       console.log(err);
     }
