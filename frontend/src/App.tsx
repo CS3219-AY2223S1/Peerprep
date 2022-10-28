@@ -38,7 +38,7 @@ function App() {
               }
             />
             <Route
-              path="/bodyCount"
+              path="/history"
               element={
                 !user ? <Navigate replace to="/login" /> : <HistoryPage />
               }

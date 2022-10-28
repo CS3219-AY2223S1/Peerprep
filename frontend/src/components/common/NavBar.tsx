@@ -41,6 +41,8 @@ const NavBar = () => {
   };
 
   const handleLogoClick = () => { navigate('/match'); };
+  const handleHistoryClick = () => { navigate('/history'); };
+
   return (
     <AppBar position="static">
       <Toolbar>
@@ -54,6 +56,7 @@ const NavBar = () => {
         </Box>
         <Stack direction="row" spacing={2}>
           <Button onClick={handleLogoClick} color="inherit">Find an Interview Partner</Button>
+          <Button onClick={handleHistoryClick} color="inherit">View Past Records</Button>
           <Button
             color="inherit"
             onClick={handleClick}
