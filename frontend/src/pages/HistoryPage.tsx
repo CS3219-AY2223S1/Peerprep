@@ -5,7 +5,7 @@ import Table from '../components/history/Table';
 export default () => {
 
 return (
-    <div className="flex flex-col h-screen">
+    <div>
       <NavBar />
       <Table />
     </div>
