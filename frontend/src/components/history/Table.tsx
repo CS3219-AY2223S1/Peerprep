@@ -12,7 +12,6 @@ import EditorView from './EditorView';
 import axios from 'axios';
 import { URL_USER_SESSION_SVC } from '../../configs';
 import { useAuthContext } from '../../contexts/AuthContext';
-import { access } from 'fs';
 import { decodeToken } from 'react-jwt';
 
 interface Column {
@@ -39,14 +38,12 @@ const columns: readonly Column[] = [
     label: 'Duration',
     minWidth: 100,
     align: 'center',
-    // format: (value: number) => value.toLocaleString('en-US'),
   },
   {
     id: 'action',
     label: 'Action',
     minWidth: 170,
     align: 'center',
-    // format: (value: number) => value.toLocaleString('en-US'),
   }
 ];
 
@@ -63,7 +60,6 @@ function createData(
   completedOn: string,
   difficulty: string,
   duration: string,
-  // put completed on
   action: string
 ): Data {
   return { partner, completedOn, difficulty, duration, action};
@@ -117,18 +113,15 @@ export default function StickyHeadTable() {
         const partner = row.userOneName === username ? row.userTwoName : row.userOneName;
         tempRows.push(createData(partner, row.completedOn, row.difficulty,row.duration, row.code));
       });
-      console.log("temp rows", tempRows);
       setRows(tempRows);
-      console.log("rows ",rows);
     }
 
   }
-  const handleCodeView = (code, partner, date) => {
+  const handleCodeView = (code, partner, date, duration) => {
     setCode(code);
     setPartner(partner);
     setDuration(duration);
     setDate(date);
-    console.log('partner:', partner)
 
     handleView();
     
@@ -207,7 +200,7 @@ export default function StickyHeadTable() {
                           const value = row[column.id];
                           return (
                             <TableCell key={column.id} align={column.align}>
-                              {column.id === 'action' ? (<Button variant="contained" size="small" onClick={()=>handleCodeView(row['action'], row['partner'], row['completedOn'])}>
+                              {column.id === 'action' ? (<Button variant="contained" size="small" onClick={()=>handleCodeView(row['action'], row['partner'], row['completedOn'], row['duration'])}>
                                     View
                                 </Button>) 
                                 : column.id === 'completedOn' ? (getFormattedDate(row['completedOn'])) 
