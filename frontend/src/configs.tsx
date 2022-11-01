@@ -5,7 +5,7 @@ const URI_HISTORY_SVC = process.env.URI_HISTORY_SVC || 'http://localhost:8004';
 
 const PREFIX_USER_SVC = '/api/user';
 
-const PREFIX_QUESTION_SVC = '/questions/test';
+const PREFIX_QUESTION_SVC = '/api/questions';
 
 const PREFIX_HISTORY_SVC = '/api/session';
 
@@ -23,7 +23,7 @@ export const URL_USER_CHANGE_PW_SVC = `${
 
 export const URL_QUESTION_GET_RANDOM = `${
   URI_QUESTION_SVC + PREFIX_QUESTION_SVC
-}/getOne`;
+}/getRandomQuestion`;
 
 export const URL_GET_ROOM_UUID = `${URI_SOCKET_SVC}/room/roomInfo`;
 

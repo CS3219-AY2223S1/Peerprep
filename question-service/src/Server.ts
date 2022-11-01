@@ -7,7 +7,7 @@ import QuestionCtrl from './controllers/QuestionCtrl';
 @Configuration({
   acceptMimes: ['application/json'],
   port: process.env.PORT || 8003,
-  mount: { '/questions': [QuestionCtrl] },
+  mount: { '/api': [QuestionCtrl] },
 })
 export default class QuestionServer {
   @Inject()

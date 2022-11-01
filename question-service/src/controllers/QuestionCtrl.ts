@@ -8,13 +8,8 @@ import {
   ormGetRandomQuestion as _getRandomQuestion,
 } from "../model/question-orm";
 
-@Controller("/test")
+@Controller("/questions")
 export default class QuestionCtrl {
-  @Get("/justin")
-  async testEndpoint(req: Request, res: Response) {
-    return res.status(200).json({message: "Today I realised I damn handsome, why am I so handsome?"});
-  }
-
   @Post("/add")
   async createQuestion(req: Request, res: Response) {
     try {
@@ -68,7 +63,7 @@ export default class QuestionCtrl {
     }
   }
 
-  @Get("/getOne")
+  @Get("/getRandomQuestion")
   async getQuestions(req: Request, res: Response) {
     const difficulty =  req.headers.difficulty as string;
     if (!(difficulty)) {
