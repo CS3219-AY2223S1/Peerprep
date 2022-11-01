@@ -11,6 +11,7 @@ import { useAuthContext } from './contexts/AuthContext';
 import LoginPage from './pages/LoginPage';
 import RoomPage from './pages/RoomPage';
 import SettingsPage from './pages/SettingsPage';
+import HistoryPage from './pages/HistoryPage';
 
 function App() {
   const { user } = useAuthContext();
@@ -34,6 +35,12 @@ function App() {
               path="/settings"
               element={
                 !user ? <Navigate replace to="/login" /> : <SettingsPage />
+              }
+            />
+            <Route
+              path="/history"
+              element={
+                !user ? <Navigate replace to="/login" /> : <HistoryPage />
               }
             />
           </Routes>
