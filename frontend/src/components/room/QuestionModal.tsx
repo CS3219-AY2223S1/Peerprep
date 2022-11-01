@@ -7,6 +7,7 @@ import axios from 'axios';
 import { URL_QUESTION_GET_RANDOM } from '../../configs';
 import { STATUS_CODE_SUCCESS } from '../../constants';
 import { useSocketContext } from '../../contexts/SocketContext';
+import { useAuthContext } from '../../contexts/AuthContext';
 
 const style = {
   position: 'absolute',
@@ -30,6 +31,7 @@ const QuestionModal = () => {
   const [render, setRender] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const { cookie } = useAuthContext();
 
   useEffect(() => {
     setPrintTitle(title);
@@ -51,7 +53,7 @@ const QuestionModal = () => {
   const getQuestion = async () => {
     const res = await axios
       .get(URL_QUESTION_GET_RANDOM, {
-        headers: { difficulty: difficulty }, //eslint-disable-line
+        headers: { difficulty: difficulty, authorization: cookie.userCred }, //eslint-disable-line
       })
       .catch((err) => {
         console.log(err);

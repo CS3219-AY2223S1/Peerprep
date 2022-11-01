@@ -134,7 +134,7 @@ export default () => {
               <Tab label="Change Password" {...a11yProps(2)} />
             </Tabs>
             <TabPanel value={value} index={0}>
-              Profile stuff
+              Profile feature coming soon!
             </TabPanel>
             <TabPanel value={value} index={1}>
               {deleteAlertStatus === 0 ? (
