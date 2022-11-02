@@ -14,6 +14,7 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
+import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import { URL_USER_LOGIN_SVC, URL_USER_SIGNUP_SVC } from '../configs';
 import {
   STATUS_CODE_CONFLICT,
@@ -25,9 +26,6 @@ import {
 } from '../constants';
 import { useAuthContext } from '../contexts/AuthContext';
 import background from '../img/background.jpg';
-import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
-
-
 
 function LoginPage() {
   const [username, setUsername] = useState('');
@@ -40,21 +38,21 @@ function LoginPage() {
   const navigate = useNavigate();
   const { dispatch, setCookie } = useAuthContext();
 
-  const style = { 
+  const style = {
     marginBottom: '1rem',
-    "& label": {color: "white"},
-    input: { color: "white" }, 
-    "& .MuiOutlinedInput-root": {
-      "&.Mui-focused fieldset": {
-        borderColor: "white"
+    '& label': { color: 'white' },
+    input: { color: 'white' },
+    '& .MuiOutlinedInput-root': {
+      '&.Mui-focused fieldset': {
+        borderColor: 'white',
       },
       '& fieldset': {
-        borderColor: 'white'
-      }
+        borderColor: 'white',
+      },
     },
     '& label.Mui-focused': {
-      color: 'white'
-    }
+      color: 'white',
+    },
   };
 
   const handleLogin = async () => {
@@ -125,15 +123,19 @@ function LoginPage() {
 
   return (
     <div style={{
-      backgroundImage: `url(${background})`,    
-      height: '100vh'
-    }}>
+      backgroundImage: `url(${background})`,
+      height: '100vh',
+      backgroundPosition: 'center',
+      backgroundRepeat: 'no-repeat',
+      backgroundSize: 'cover',
+    }}
+    >
       <Box className="flex flex-col space-y-8 w-1/3 m-auto text-center">
-        <div className='flex items-center justify-center pt-6'>
-        <PeopleAltIcon className='scale-125 font-black font-mono' htmlColor='white' fontSize='large'/>
-        <Typography className="text-white" variant="h2" component="div" marginLeft="1rem"  sx={{fontWeight: 'bold'}}>
+        <div className="flex items-center justify-center pt-6">
+          <PeopleAltIcon className="scale-125 font-black font-mono" htmlColor="white" fontSize="large" />
+          <Typography className="text-white" variant="h2" component="div" marginLeft="1rem" sx={{ fontWeight: 'bold' }}>
             PEERPREP
-        </Typography>
+          </Typography>
         </div>
         <div className="flex justify-center">
           {isExistingUser ? (
@@ -148,7 +150,7 @@ function LoginPage() {
         </div>
         <TextField
           label="Username"
-          id="outlined-basic" 
+          id="outlined-basic"
           variant="outlined"
           onChange={(e) => setUsername(e.target.value)}
           sx={style}
@@ -156,8 +158,8 @@ function LoginPage() {
         />
         <TextField
           label="Password"
-          id="outlined-basic" 
-          color='info'
+          id="outlined-basic"
+          color="info"
           variant="outlined"
           type="password"
           onChange={(e) => setPassword(e.target.value)}
@@ -169,11 +171,11 @@ function LoginPage() {
               component="button"
               variant="body2"
               onClick={toggleSignupStatus}
-              sx={{ color:'white', borderColor:'white' }}
+              sx={{ color: 'white', borderColor: 'white' }}
             >
               Sign up
             </ButtonLink>
-            <Button variant="outlined" sx={{ color:'white', borderColor:'white' }} onClick={handleLogin}>
+            <Button variant="outlined" sx={{ color: 'white', borderColor: 'white' }} onClick={handleLogin}>
               Log in
             </Button>
           </Box>
@@ -183,11 +185,11 @@ function LoginPage() {
               component="button"
               variant="body2"
               onClick={toggleSignupStatus}
-              sx={{ color:'white', borderColor:'white' }}
+              sx={{ color: 'white', borderColor: 'white' }}
             >
               Login
             </ButtonLink>
-            <Button variant="outlined" sx={{ color:'white', borderColor:'white' }} onClick={handleSignup}>
+            <Button variant="outlined" sx={{ color: 'white', borderColor: 'white' }} onClick={handleSignup}>
               Sign up
             </Button>
           </Box>
@@ -200,11 +202,11 @@ function LoginPage() {
           </DialogContent>
           <DialogActions>
             {isSignupSuccess ? (
-              <Button component="button" sx={{ color:'white', borderColor:'white' }} onClick={toggleLogin}>
+              <Button component="button" sx={{ color: 'white', borderColor: 'white' }} onClick={toggleLogin}>
                 Login
               </Button>
             ) : (
-              <Button sx={{ color:'white', borderColor:'white' }} onClick={closeDialog}>Done</Button>
+              <Button sx={{ color: 'white', borderColor: 'white' }} onClick={closeDialog}>Done</Button>
             )}
           </DialogActions>
         </Dialog>

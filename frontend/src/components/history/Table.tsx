@@ -180,40 +180,40 @@ export default function StickyHeadTable() {
                 <Table stickyHeader aria-label="sticky table">
                   <TableHead>
                     <TableRow>
-                    {columns.map((column) => (
-                      <TableCell
-                      key={column.id}
-                      align={column.align}
-                      style={{ minWidth: column.minWidth }}
-                    >
-                      {column.label}
-                    </TableCell>
-                    ))}
-                  </TableRow>
+                      {columns.map((column) => (
+                        <TableCell
+                          key={column.id}
+                          align={column.align}
+                          style={{ minWidth: column.minWidth }}
+                        >
+                          {column.label}
+                        </TableCell>
+                      ))}
+                    </TableRow>
                   </TableHead>
                   <TableBody>
                     {rows
-                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .map((row, index) => (
-                      <TableRow hover role="checkbox" tabIndex={-1} key={index}>
-                      {columns.map((column) => {
-                        const value = row[column.id];
-                        return (
-                          <TableCell key={column.id} align={column.align}>
-                            {column.id === 'action' ? (
-                              <Button variant="contained" size="small" onClick={() => handleCodeView(row.action, row.partner, row.completedOn, row.duration)}>
-                                  View
-                                </Button>
-                            )
-                              : column.id === 'completedOn' ? (getFormattedDate(row.completedOn))
-                                : column.id === 'duration' ? (getFormattedDuration(row.duration))
-                                  : column.format && typeof value === 'number'
-                                    ? column.format(value) : value}
-                          </TableCell>
-                        );
-                      })}
-                    </TableRow>
-                    ))}
+                      .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                      .map((row, index) => (
+                        <TableRow hover role="checkbox" tabIndex={-1} key={index}>
+                          {columns.map((column) => {
+                            const value = row[column.id];
+                            return (
+                              <TableCell key={column.id} align={column.align}>
+                                {column.id === 'action' ? (
+                                  <Button variant="contained" size="small" onClick={() => handleCodeView(row.action, row.partner, row.completedOn, row.duration)}>
+                                    View
+                                  </Button>
+                                )
+                                  : column.id === 'completedOn' ? (getFormattedDate(row.completedOn))
+                                    : column.id === 'duration' ? (getFormattedDuration(row.duration))
+                                      : column.format && typeof value === 'number'
+                                        ? column.format(value) : value}
+                              </TableCell>
+                            );
+                          })}
+                        </TableRow>
+                      ))}
                   </TableBody>
                 </Table>
               </TableContainer>
