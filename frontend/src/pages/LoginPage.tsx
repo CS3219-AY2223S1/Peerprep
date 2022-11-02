@@ -9,7 +9,6 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-  Icon,
   Link as ButtonLink,
   TextField,
   Typography,
@@ -37,6 +36,7 @@ function LoginPage() {
   const [isExistingUser, setIsExistingUser] = useState(true);
   const navigate = useNavigate();
   const { dispatch, setCookie } = useAuthContext();
+  const [confirmPassword, setConfirmPassword] = useState('');
 
   const style = {
     marginBottom: '1rem',
@@ -76,6 +76,11 @@ function LoginPage() {
 
   const handleSignup = async () => {
     setIsSignupSuccess(false);
+    if (username && (password != confirmPassword)) {
+      setErrorDialog('The password and confirm password are not the same');
+      return;
+    }
+
     const res = await axios
       .post(URL_USER_SIGNUP_SVC, { username, password })
       .catch((err) => {
@@ -165,6 +170,19 @@ function LoginPage() {
           onChange={(e) => setPassword(e.target.value)}
           sx={style}
         />
+        {
+          isExistingUser ? null : (
+            <TextField
+              label="Confirm password"
+              id="outlined-basic"
+              color="info"
+              variant="outlined"
+              type="password"
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              sx={style}
+            />
+          )
+        }
         {isExistingUser ? (
           <Box className="flex justify-between">
             <ButtonLink
