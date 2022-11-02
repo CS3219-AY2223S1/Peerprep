@@ -12,12 +12,13 @@ import LoginPage from './pages/LoginPage';
 import RoomPage from './pages/RoomPage';
 import SettingsPage from './pages/SettingsPage';
 import HistoryPage from './pages/HistoryPage';
+import background from './img/background.jpg';
 
 function App() {
   const { user } = useAuthContext();
 
   return (
-    <div className="App">
+    <div className='App'>
       <Box display="flex" flexDirection="column">
         <Router>
           <Routes>
