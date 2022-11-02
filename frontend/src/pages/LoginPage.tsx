@@ -76,7 +76,7 @@ function LoginPage() {
 
   const handleSignup = async () => {
     setIsSignupSuccess(false);
-    if (username && (password != confirmPassword)) {
+    if (username && (password !== confirmPassword)) {
       setErrorDialog('The password and confirm password are not the same');
       return;
     }
