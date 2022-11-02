@@ -26,7 +26,7 @@ export default () => {
     if (collaborationSocket) {
       collaborationSocket.on(CollabSocketEvent.DISCONNECT_ALL, () => {
         dispatch({ type: 'DISCONNECTED' });
-        navigate('/match');
+        navigate('/history');
       });
     }
   }, [collaborationSocket]);
@@ -81,7 +81,7 @@ export default () => {
     res.then(() => {
       collaborationSocket.emit(CollabSocketEvent.DISCONNECT_ALL);
       dispatch({ type: 'DISCONNECTED' });
-      navigate('/match');
+      navigate('/history');
       window.location.reload();
     });
   };

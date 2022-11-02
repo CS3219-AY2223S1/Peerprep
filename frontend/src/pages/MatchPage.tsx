@@ -22,7 +22,6 @@ export default () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Example
     fetchData();
   }, [timer]);
 

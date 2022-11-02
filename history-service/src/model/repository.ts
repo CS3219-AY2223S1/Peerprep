@@ -17,5 +17,5 @@ export async function createSession(params: ISessionModel) {
 }
 
 export async function getSession(options: any) {
-  return SessionModel.find(options);
+  return SessionModel.find(options).sort({ _id: -1 });
 }

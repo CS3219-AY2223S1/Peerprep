@@ -23,11 +23,11 @@ export default class SessionCtrl {
       const token = req.headers.authorization || req.headers.Authorization as unknown as string;
       const user = jwt_decode(token) as User;
       const {
-        userTwoName, completedOn, duration, roomUuid, difficulty, code,
+        userTwoName, completedOn, duration, roomUuid, difficulty
       } = req.body;
       req.body.userOneName = user.username;
 
-      if (userTwoName && completedOn && duration && roomUuid && difficulty && code) {
+      if (userTwoName && completedOn && duration && roomUuid && difficulty) {
         const duplicateSessions = await _checkDuplicateSess(roomUuid) as Array<any>;
         if (duplicateSessions.length > 0) {
           return res
