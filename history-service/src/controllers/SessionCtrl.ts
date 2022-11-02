@@ -2,8 +2,9 @@ import { Request, Response } from 'express';
 import { Get, Post, Returns } from '@tsed/schema';
 import { Controller } from '@tsed/di';
 import { UseAuth } from '@tsed/platform-middlewares';
-import { Unauthorized } from '@tsed/exceptions';
+import { Exception, Unauthorized } from '@tsed/exceptions';
 import jwt_decode from 'jwt-decode';
+import { ISessionModel } from 'src/model/session-model';
 import { AuthMiddleware } from '../middlewares/authMiddleware';
 import {
   ormCreateSession as _createSession,
@@ -11,12 +12,12 @@ import {
   ormGetSessionByRoom as _checkDuplicateSess,
 } from '../model/session-orm';
 import { User } from '../constants';
+import { transformAllToSessionRes } from '../transformers/session';
 
 @Controller('/session')
 export default class SessionCtrl {
   @Post('/add')
   @UseAuth(AuthMiddleware)
-  @Returns(401, Unauthorized).Description("Unauthorized")
   async createSession(req: Request, res: Response) {
     try {
       const token = req.headers.authorization || req.headers.Authorization as unknown as string;
@@ -56,7 +57,6 @@ export default class SessionCtrl {
 
   @Get('/userSession')
   @UseAuth(AuthMiddleware)
-  @Returns(401, Unauthorized).Description("Unauthorized")
   async getUserSessions(req: Request, res: Response) {
     try {
       const token = req.headers.authorization || req.headers.Authorization as unknown as string;
@@ -66,10 +66,10 @@ export default class SessionCtrl {
           .status(400)
           .json({ message: 'Could not create retrieve any session' });
       }
-      const result = await _getSession(user.username);
+      const result = (await _getSession(user.username)) as unknown as ISessionModel[];
       return res
         .status(200)
-        .json(result);
+        .json(transformAllToSessionRes(result));
     } catch (err) {
       return res
         .status(500)

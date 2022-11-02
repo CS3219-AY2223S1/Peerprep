@@ -12,12 +12,12 @@ export class AuthMiddleware implements MiddlewareMethods {
   public use(@Req() req: Req, @Res() res: Res) {
     const token = req.headers.authorization || req.headers.Authorization as unknown as string;
     if (token == null) {
-      throw new Unauthorized('Unauthorized');
+      return res.status(401).json('Unauthorized');
     }
 
     jwt.verify(token, process.env.LOGIN_SECRET_KEY!, async (err) => {
       if (err) {
-        throw new Unauthorized('Unauthorized');
+        return res.status(401).json('Unauthorized');
       }
     });
   }

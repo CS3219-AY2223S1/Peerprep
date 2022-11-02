@@ -8,9 +8,6 @@ import {
   Difficulty,
   Match,
   SocketEvent,
-  STATUS_CODE_CONFLICT,
-  STATUS_CODE_INVALID,
-  STATUS_CODE_UNAUTHORISED,
 } from '../constants';
 import { ConnectedElseWhereModal, AlreadyInQueueModal } from '../components';
 import { useSocketContext } from '../contexts/SocketContext';
@@ -98,7 +95,7 @@ export default () => {
             </div>
           ) : (
             <div className="flex flex-col space-y-8">
-              <p>{user}</p>
+              {/* <p>{user}</p> */}
               <Button size="large" variant="contained" color="success" onClick={() => handleSelection(Difficulty.Easy)}><b>Easy</b></Button>
               <Button size="large" variant="contained" color="warning" onClick={() => handleSelection(Difficulty.Medium)}><b>Medium</b></Button>
               <Button size="large" variant="contained" color="error" onClick={() => handleSelection(Difficulty.Hard)}><b>Hard</b></Button>
