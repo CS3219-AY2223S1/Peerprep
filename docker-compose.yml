@@ -1,0 +1,68 @@
+version: '3.8'
+services:
+  mongo-user:
+    image: mongo
+    ports:
+      - "27017:27017"
+  mongo-history:
+    image: mongo
+    ports:
+      - "27018:27017"
+  redis:
+    image: redis:6.2-alpine
+    ports:
+      - "6379:6379"
+  postgres:
+    image: postgres:14-alpine
+    ports:
+      - "5455:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=root
+  user-service:
+    build: ./user-service
+    command: npm run dev
+    depends_on:
+      - mongo-user
+    ports:
+      - "8000:8000"
+    environment:
+      - DB_LOCAL_URI=mongodb://mongo-user:27017/peerprep-db
+  matching-service:
+    build: ./matching-service
+    command: sh -c "npx prisma migrate dev && npm run dev"
+    ports:
+      - "8001:8001"
+    depends_on:
+      - postgres
+    environment:
+      - DATABASE_URL=postgresql://postgres:root@postgres:5432/mydb?schema=public
+  history-service:
+    build: ./history-service
+    command: npm run dev
+    depends_on:
+      - mongo-history
+    ports:
+      - "8004:8004"
+    environment:
+      - DB_LOCAL_URI=mongodb://mongo-history:27017/peerprep-db
+  collaboration-service:
+    build: ./collaboration-service
+    command: npm run dev
+    ports:
+      - "9001:9001"
+    depends_on:
+      - redis
+    environment:
+      - URI_HISTORY_SVC= http://history-service:8004
+      - REDIS=redis
+  communication-service:
+    build: ./communication-service
+    command: npm run dev
+    ports:
+      - "8002:8002"
+  question-service:
+    build: ./question-service
+    command: npm run dev
+    ports:
+      - "8003:8003"
