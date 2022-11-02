@@ -1,5 +1,5 @@
 import { createSession, getSession } from './repository';
-import sessionModel, { ISessionModel } from './session-model';
+import { ISessionModel } from './session-model';
 
 export async function ormCreateSession(session: ISessionModel) {
   try {
