@@ -1,16 +1,16 @@
 {
 	"info": {
-		"_postman_id": "fa3ca986-dac2-4a70-9add-94ebe3558620",
+		"_postman_id": "e2340253-fd25-4f47-a268-7f26048acd6d",
 		"name": "peerdep-api",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "15764301"
 	},
 	"item": [
 		{
-			"name": "User Service",
+			"name": "User service",
 			"item": [
 				{
-					"name": "Create user - SUCCESS",
+					"name": "Create user",
 					"request": {
 						"method": "POST",
 						"header": [],
@@ -40,67 +40,7 @@
 					"response": []
 				},
 				{
-					"name": "Create user - USER_EXISTS (run after success)",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"username\" : \"test\",\r\n    \"password\" : \"testtest\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8000/api/user/signup",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8000",
-							"path": [
-								"api",
-								"user",
-								"signup"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Create user - PASSWORD_TOO_SHORT",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"username\" : \"test2\",\r\n    \"password\" : \"test\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8000/api/user/signup",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8000",
-							"path": [
-								"api",
-								"user",
-								"signup"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Login user - SUCCESS",
+					"name": "Login user",
 					"request": {
 						"method": "POST",
 						"header": [],
@@ -130,13 +70,19 @@
 					"response": []
 				},
 				{
-					"name": "Login user - INVALID_USER/PW",
+					"name": "Delete user",
 					"request": {
 						"method": "POST",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJpZCI6MSwiaWF0IjoxNjY3ODg0MDc0LCJleHAiOjE2Njc5NzA0NzR9.EOroR09u1BXeMjDnOA-EVJyE8wosglWBm4ixwJzHrWU",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"username\" : \"invalidUser\",\n    \"password\" : \"invalidPW\"\n}",
+							"raw": "{\r\n    \"username\" : \"test\",\r\n    \"password\" : \"testtest1\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -144,7 +90,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8000/api/user/login",
+							"raw": "http://localhost:8000/api/user/delete",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -153,7 +99,43 @@
 							"path": [
 								"api",
 								"user",
-								"login"
+								"delete"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Change password",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJpZCI6MSwiaWF0IjoxNjY3ODg0MDc0LCJleHAiOjE2Njc5NzA0NzR9.EOroR09u1BXeMjDnOA-EVJyE8wosglWBm4ixwJzHrWU",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\" : \"test\",\r\n    \"password\" : \"testtest\",\r\n    \"newPassword\" : \"testtest1\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/user/change_password",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"user",
+								"change_password"
 							]
 						}
 					},
@@ -168,7 +150,13 @@
 					"name": "Add question",
 					"request": {
 						"method": "POST",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJpZCI6MiwiaWF0IjoxNjY3ODg0NTIxLCJleHAiOjE2Njc5NzA5MjF9.8e4oxzZlYdmXj2mV4r-8y4Q4XQipHxmdI8hhBQaeTBY",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "urlencoded",
 							"urlencoded": [
@@ -184,7 +172,7 @@
 								},
 								{
 									"key": "difficulty",
-									"value": "Hard",
+									"value": "HARD",
 									"type": "text"
 								},
 								{
@@ -200,15 +188,15 @@
 							]
 						},
 						"url": {
-							"raw": "http://localhost:8003/questions/test/add",
+							"raw": "http://localhost:8003/api/questions/add",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8003",
 							"path": [
+								"api",
 								"questions",
-								"test",
 								"add"
 							]
 						}
@@ -219,27 +207,33 @@
 					"name": "Delete question",
 					"request": {
 						"method": "POST",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJpZCI6MiwiaWF0IjoxNjY3ODg0NTIxLCJleHAiOjE2Njc5NzA5MjF9.8e4oxzZlYdmXj2mV4r-8y4Q4XQipHxmdI8hhBQaeTBY",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "urlencoded",
 							"urlencoded": [
 								{
 									"key": "title",
-									"value": "Ten",
+									"value": "Blake",
 									"type": "text"
 								}
 							]
 						},
 						"url": {
-							"raw": "http://localhost:8003/questions/test/delete",
+							"raw": "http://localhost:8003/api/questions/delete",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8003",
 							"path": [
+								"api",
 								"questions",
-								"test",
 								"delete"
 							]
 						}
@@ -253,21 +247,26 @@
 						"header": [
 							{
 								"key": "difficulty",
-								"value": "Easy peasy",
+								"value": "EASY",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJpZCI6MiwiaWF0IjoxNjY3ODg0NTIxLCJleHAiOjE2Njc5NzA5MjF9.8e4oxzZlYdmXj2mV4r-8y4Q4XQipHxmdI8hhBQaeTBY",
 								"type": "text"
 							}
 						],
 						"url": {
-							"raw": "http://localhost:8003/questions/test/getOne",
+							"raw": "http://localhost:8003/api/questions/getRandomQuestion",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8003",
 							"path": [
+								"api",
 								"questions",
-								"test",
-								"getOne"
+								"getRandomQuestion"
 							]
 						}
 					},
@@ -285,13 +284,13 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJpZCI6MTIsImlhdCI6MTY2NjQ0MTc3MywiZXhwIjoxNjY2NTI4MTczfQ.nCnObkCA0SL-C4XTapoIoQiRp22c8TpuTF9j9pFWT0w",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJpZCI6MiwiaWF0IjoxNjY3ODg0NjEwLCJleHAiOjE2Njc5NzEwMTB9.V-iTo8vWcXnJv7eAtdvhjJMcxzS0Oqr4SOI_GUMnJ0A",
 								"type": "text"
 							}
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"userTwoName\" : \"testtest\",\r\n    \"completedOn\": \"1852-01-15T11:25\",\r\n    \"duration\":\"1h10m\",\r\n    \"difficulty\": \"hard\",\r\n    \"roomUuid\": \"123\",\r\n    \"code\": \"print('help')\"\r\n}",
+							"raw": "{\r\n    \"userTwoName\" : \"testtest\",\r\n    \"completedOn\": \"1852-01-15T11:25\",\r\n    \"duration\":\"987645321\",\r\n    \"difficulty\": \"hard\",\r\n    \"roomUuid\": \"123\",\r\n    \"code\": \"print('help')\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -321,7 +320,7 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJpZCI6MTIsImlhdCI6MTY2NjQ0MTc3MywiZXhwIjoxNjY2NTI4MTczfQ.nCnObkCA0SL-C4XTapoIoQiRp22c8TpuTF9j9pFWT0w",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJpZCI6MiwiaWF0IjoxNjY3ODg0NjEwLCJleHAiOjE2Njc5NzEwMTB9.V-iTo8vWcXnJv7eAtdvhjJMcxzS0Oqr4SOI_GUMnJ0A",
 								"type": "text"
 							}
 						],
@@ -336,6 +335,63 @@
 								"api",
 								"session",
 								"userSession"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Matching Service",
+			"item": [
+				{
+					"name": "Get room info",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJpZCI6MiwiaWF0IjoxNjY3ODg0NjEwLCJleHAiOjE2Njc5NzEwMTB9.V-iTo8vWcXnJv7eAtdvhjJMcxzS0Oqr4SOI_GUMnJ0A",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8001/room/roomInfo",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8001",
+							"path": [
+								"room",
+								"roomInfo"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Leave room",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJpZCI6MiwiaWF0IjoxNjY3ODg0NjEwLCJleHAiOjE2Njc5NzEwMTB9.V-iTo8vWcXnJv7eAtdvhjJMcxzS0Oqr4SOI_GUMnJ0A",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8001/room/leaveRoom",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8001",
+							"path": [
+								"room",
+								"leaveRoom"
 							]
 						}
 					},

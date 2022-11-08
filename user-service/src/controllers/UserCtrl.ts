@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { Post, string } from '@tsed/schema';
+import { Post } from '@tsed/schema';
 import { Controller } from '@tsed/di';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
@@ -11,7 +11,9 @@ import {
   ormGetUserId as _getUserId,
   ormUpdateUserPassword as _updateUserPassword,
 } from '../model/user-orm';
-import { verifyToken } from './authMiddleware';
+import { verifyToken } from '../middlewares/verifyMiddleware';
+import { AuthMiddleware } from '../middlewares/authMiddleware';
+import { UseAuth } from '@tsed/common';
 
 @Controller('/user')
 export default class UserCtrl {
@@ -117,15 +119,12 @@ export default class UserCtrl {
   }
 
   @Post('/delete')
+  @UseAuth(AuthMiddleware)
   async deleteUser(req: Request, res: Response) {
-    const { password, accessToken } = req.body;
-    if (!accessToken) {
-      return res.status(400).json({ message: 'No jwt sent!' });
-    }
+    const { password } = req.body;
+    const accessToken = req.headers.authorization || req.headers.Authorization as unknown as string;
+
     const verifiedToken = await verifyToken(accessToken);
-    if (!verifiedToken) {
-      return res.status(403).json({ message: 'Invalid jwt!' });
-    }
     const { username } = verifiedToken as JwtPayload;
     if (!(username && password)) {
       return res
@@ -146,20 +145,16 @@ export default class UserCtrl {
   }
 
   @Post('/change_password')
+  @UseAuth(AuthMiddleware)
   async changeUserPassword(req: Request, res: Response) {
-    const { password, newPassword, accessToken } = req.body;
+    const { password, newPassword } = req.body;
+    const accessToken = req.headers.authorization || req.headers.Authorization as unknown as string;
     if (password === newPassword) {
       return res
         .status(409)
         .json({ message: 'New password cannot be the same as old password!' });
     }
-    if (!accessToken) {
-      return res.status(400).json({ message: 'No jwt sent!' });
-    }
     const verifiedToken = await verifyToken(accessToken);
-    if (!verifiedToken) {
-      return res.status(403).json({ message: 'Invalid jwt!' });
-    }
     const { username } = verifiedToken as JwtPayload;
     if (!(username && password)) {
       return res
