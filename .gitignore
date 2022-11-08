@@ -1,0 +1,8 @@
+node_modules
+.env
+.DS_Store
+frontend/.DS_Store
+frontend/src/components/.DS_Store
+user-service/.DS_Store
+user-service/src/.DS_Store
+frontend/src/.DS_Store
