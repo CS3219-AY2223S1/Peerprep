@@ -67,15 +67,15 @@ function createData(
   };
 }
 
-const style = {
-  position: 'absolute',
-  top: '40%',
-  left: '59%',
-  transform: 'translate(-50%, -50%)',
-  width: '90%',
-  height: 500,
-  alignItems: 'left',
-};
+// const style = {
+//   position: 'absolute',
+//   top: '40%',
+//   left: '59%',
+//   transform: 'translate(-50%, -50%)',
+//   width: '90%',
+//   height: 500,
+//   alignItems: 'left',
+// };
 
 export default function StickyHeadTable() {
   const [page, setPage] = useState(0);
@@ -83,7 +83,7 @@ export default function StickyHeadTable() {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [openView, setOpenView] = useState(false);
   const [code, setCode] = useState('');
-  const { user, cookie } = useAuthContext();
+  const { cookie } = useAuthContext();
   const [partner, setPartner] = useState('');
   const [date, setDate] = useState('');
   const [username, setUsername] = useState<String>('');
@@ -160,13 +160,15 @@ export default function StickyHeadTable() {
   };
 
   return (
-    <div className="mt-10">
+    <div className="mt-5 h-[80vh] overflow-auto">
 
       { openView
         ? (
-          <Box sx={style}>
+          <Box className="flex flex-col items-center h-3/4">
             <EditorView code={code} partner={partner} date={getFormattedDate(date)} duration={getFormattedDuration(duration)} />
-            <Button variant="contained" size="small" onClick={handleView}>Back</Button>
+            <div className="flex w-3/4">
+              <Button variant="contained" size="small" onClick={handleView}>Back</Button>
+            </div>
           </Box>
         )
         : (
