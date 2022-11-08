@@ -1,8 +1,7 @@
 import { Request, Response } from 'express';
-import { Get, Post, Returns } from '@tsed/schema';
+import { Get, Post } from '@tsed/schema';
 import { Controller } from '@tsed/di';
 import { UseAuth } from '@tsed/platform-middlewares';
-import { Exception, Unauthorized } from '@tsed/exceptions';
 import jwt_decode from 'jwt-decode';
 import { ISessionModel } from 'src/model/session-model';
 import { AuthMiddleware } from '../middlewares/authMiddleware';
