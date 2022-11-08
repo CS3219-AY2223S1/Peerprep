@@ -46,7 +46,7 @@ export default () => {
   const handleDelete = async () => {
     const accessToken = cookie.userCred;
     const res = await axios
-      .post(URL_USER_DELETE_SVC, { password: deletePassword, accessToken })
+      .post(URL_USER_DELETE_SVC, { password: deletePassword }, { headers: { Authorization: accessToken } })
       .catch((err) => {
         if (err.response.status === STATUS_CODE_FORBIDDEN) {
           handleDeleteAlert(1, 'Invalid Password!');
@@ -85,7 +85,7 @@ export default () => {
     }
     const accessToken = cookie.userCred;
     const res = await axios
-      .post(URL_USER_CHANGE_PW_SVC, { password: changePWPassword, newPassword: newPassword1, accessToken })
+      .post(URL_USER_CHANGE_PW_SVC, { password: changePWPassword, newPassword: newPassword1 }, { headers: { Authorization: accessToken } })
       .catch((err) => {
         if (err.response.status === STATUS_CODE_FORBIDDEN) {
           handleChangePWAlert(true, 'Invalid Password!');
@@ -171,7 +171,7 @@ export default () => {
             </TabPanel>
             <TabPanel value={value} index={2}>
               <Box>
-                { isClicked ? changePWAlertStatus ? (<Alert severity="error" sx={{ marginBottom: '1rem' }}>{changePWAlertMessage}</Alert>) : (<Alert severity="success" sx={{ marginBottom: '1rem' }}>{changePWAlertMessage}</Alert>) : null}
+                {isClicked ? changePWAlertStatus ? (<Alert severity="error" sx={{ marginBottom: '1rem' }}>{changePWAlertMessage}</Alert>) : (<Alert severity="success" sx={{ marginBottom: '1rem' }}>{changePWAlertMessage}</Alert>) : null}
                 <TextField
                   label="Old Password"
                   align-self="center"

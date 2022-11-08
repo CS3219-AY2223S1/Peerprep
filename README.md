@@ -19,8 +19,6 @@ skeleton.
 
 1. Copy `.env.example` file as `.env`.
 2. Update the relevant environment variables
-   ~~3. Create a Cloud DB URL using Mongo Atlas.~~  
-   ~~4. Enter the DB URL created as `DB_CLOUD_URI` in `.env` file.~~
 3. Install npm packages using `npm i`.
 4. Run User Service using `npm run dev`.
 
